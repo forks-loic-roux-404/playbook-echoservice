@@ -1,0 +1,2 @@
+symfony_url: https://symfony.com/installer
+src_repo: https://github.com/g4-dev/src-{{ projectname }}.git

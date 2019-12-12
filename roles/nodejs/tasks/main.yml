@@ -1,0 +1,75 @@
+##################################################
+### Pre-Checks
+- name: Check if repository is already available
+  shell: 'grep {{ nodejs_version }} /etc/apt/sources.list.d/nodesource.list | wc -l'
+  register: nodejs_repo
+
+- name: Check if any nodejs is installed
+  shell: 'dpkg --list | grep nodejs | grep "^ii" | wc -l'
+  register: nodejs_installed
+
+- name: Check installed version
+  shell: 'nodejs -v | grep v{{ nodejs_version }} | wc -l'
+  register: nodejs_installed_version
+  when: nodejs_installed.stdout != "0"
+
+##################################################
+### Install nodejs
+- name: Download Installer from Repo
+  get_url:
+    url: "{{ nodejs_url }}"
+    dest: "{{ nodejs_tmp }}"
+    mode: 0777
+    force: yes
+  when: nodejs_repo.stdout == "0"
+
+- name: Run Installer
+  shell: "/bin/bash {{ nodejs_tmp }}"
+  when: nodejs_repo.stdout == "0"
+
+- name: Remove old Nodejs
+  apt:
+    pkg:
+      - nodejs
+    state: absent
+  when: nodejs_installed.stdout != "0" and nodejs_installed.stdout == "0"
+
+- name: Install Nodejs
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - nodejs
+
+##################################################
+### Install nodejs plugins
+#- name: Install nodejs plugins
+#  npm: name="{{ item }}" global=yes
+#  with_items:
+#    - node-sass
+
+##################################################
+# Install yarn
+
+- name: "Yarn | GPG"
+  apt_key:
+    url: https://dl.yarnpkg.com/debian/pubkey.gpg
+    state: present
+
+- name: "Yarn | Ensure Debian sources list file exists"
+  file:
+    path: /etc/apt/sources.list.d/yarn.list
+    owner: root
+    mode: 0644
+    state: touch
+
+- name: "Yarn | Ensure Debian package is in sources list"
+  lineinfile:
+    dest: /etc/apt/sources.list.d/yarn.list
+    regexp: 'deb http://dl.yarnpkg.com/debian/ stable main'
+    line: 'deb http://dl.yarnpkg.com/debian/ stable main'
+    state: present
+
+- name: "Yarn | Update APT cache"
+  apt:
+    update_cache: yes

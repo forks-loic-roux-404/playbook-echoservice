@@ -1,0 +1,79 @@
+##################################################
+### Restart services for testing
+- name: Restart services for testing
+  service: 
+    name: "{{ item }}"
+    state: restarted
+  with_items:
+  - nginx
+  - php{{ php_version }}-fpm
+
+##################################################
+### Installation tests
+- name: Check Nginx
+  shell: 'nginx -v'
+  register: test_result
+
+- name: Display result
+  debug: 
+    msg: "{{ test_result.stderr }}"
+
+- name: Check MySQL
+  shell: 'mysql --version'
+  register: test_result
+
+- name: Display result
+  debug: 
+    msg: "{{ test_result.stdout }}"
+
+- name: Check Redis
+  shell: 'redis-server --version'
+  register: test_result
+
+- name: Display result
+  debug:
+    msg: "{{ test_result.stdout }}"
+
+- name: Check PHP
+  shell: 'php -v | head -1'
+  register: test_result
+
+- name: Display result
+  debug:
+    msg: "{{ test_result.stdout }}"
+
+- name: Check Composer
+  shell: 'composer --version'
+  register: test_result
+
+- name: Display result
+  debug: 
+    msg: "{{ test_result.stdout }}"
+
+- name: Check PHPUnit
+  shell: 'phpunit --version'
+  register: test_result
+
+- name: Display result
+  debug:
+    msg: "{{ test_result.stdout }}"
+
+- name: Check nodejs
+  shell: 'nodejs -v'
+  register: test_result
+
+- name: Display result
+  debug:
+    msg: "{{ test_result.stdout }}"
+
+##################################################
+### Functionality tests
+- name: Webserver check
+  action: uri url=http://127.0.0.1/ return_content=yes
+  ignore_errors: yes
+  register: webserver
+
+- name: Webserver check result
+  fail:
+    msg: "Webserver isn't working properly"
+  when: "'nginx' not in webserver.server"

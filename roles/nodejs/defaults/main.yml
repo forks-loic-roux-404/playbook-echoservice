@@ -1,0 +1,3 @@
+nodejs_version: 12 # 8 for LTS version or 9 for developer version
+nodejs_url: https://deb.nodesource.com/setup_{{ nodejs_version }}.x
+nodejs_tmp: /tmp/nodejs_installer
