@@ -1,4 +1,10 @@
-##################################################
+- name: Remove nginx default config
+  file: 
+    path: "/etc/nginx/conf.d/default.conf"
+    state: absent
+  notify:
+   - restart nginx
+
 ### Install and configure webserver
 - name: Add apt key for Debian
   apt_key: 
@@ -7,7 +13,7 @@
 
 - name: Add repository for Debian
   apt_repository: 
-    repo: "{{ item }} http://nginx.org/packages/debian/ {{ ansible_distribution_release }} nginx"
+    repo: "{{ item }} http://nginx.org/packages/{{ nginx_release }}/debian/ {{ ansible_distribution_release }} nginx"
     state: present
     update_cache: yes
   with_items:
@@ -40,23 +46,15 @@
 - name: Copy new virtual hosts file.
   template:
     src: vagrant.skel
-    dest: /etc/nginx/sites-available/vagrant
+    dest: /etc/nginx/sites-available/{{ projectname }}
 
 - name: Enable new virtual hosts file.
   file:
-    src: /etc/nginx/sites-available/vagrant
-    dest: /etc/nginx/sites-enabled/vagrant
+    src: /etc/nginx/sites-available/{{ projectname }}
+    dest: /etc/nginx/sites-enabled/{{ projectname }}
     state: link
   notify:
    - restart nginx
-
-- name: Allow Ports
-  ufw:
-    rule: allow
-    port: "{{ item }}"
-  with_items:
-    - 80
-    - 443
 
 - name: Start Nginx and enable the service in autostart
   service:

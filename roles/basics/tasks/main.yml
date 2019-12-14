@@ -1,8 +1,8 @@
-##################################################
 ### Install basic system packages
 - name: Install basic packages
   apt: 
     pkg:
+      - gnupg2
       - vim
       - git
       - curl
@@ -16,6 +16,7 @@
       - apt-transport-https
       - ca-certificates
       - imagemagick
+      - python-openssl
     state: present
 
 - set_fact: 
@@ -29,7 +30,6 @@
     state: present
   when: nfs_enabled == true
 
-##################################################
 ### Convenience
 - name: Configure inputrc / vimrc and motd for root
   template: 
@@ -41,24 +41,15 @@
    - { src: inputrc, dest: /home/vagrant/.inputrc }
    - { src: vimrc, dest: /home/vagrant/.vimrc }
    - { src: motd, dest: /etc/motd }
+   - { src: aliases, dest: /home/vagrant/.bash_profile }
   
 - name: Set new welcome message  
   shell: |
     echo "PrintLastLog no" >> /etc/ssh/sshd_config
     rm -rf /etc/update-motd.d/*
 
-##################################################
-### Install and configute ufw firewall
-- name: Set up firewall
-  apt: 
-    name: ufw
-    state: present
+- name: key pathfile create 
+  file: 
+    path: "{{ passfile }}"
+    state: touch
 
-- name: Allow Port 22
-  ufw: 
-    rule: allow 
-    port: 22
-
-- name: Start the firewall
-  ufw: 
-    state: enabled

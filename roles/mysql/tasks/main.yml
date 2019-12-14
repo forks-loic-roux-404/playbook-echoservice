@@ -19,6 +19,8 @@
 - name: Database creation
   mysql_db:
     name: "{{ mysql_db }}"
+    collation: utf8_general_ci
+    encoding: utf8
     state: present
 
 - name: my.cnf configuration
@@ -29,9 +31,9 @@
     value: "*"
   notify: restart mysql
 
-- name: Allow Ports
-  ufw: 
-    rule: allow
-    port: "{{ item }}"
-  with_items:
-    - 3306
+# - name: Allow Ports
+#   ufw: 
+#     rule: allow
+#     port: "{{ item }}"
+#   with_items:
+#     - 3306

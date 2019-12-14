@@ -1,4 +1,3 @@
-##################################################
 ### Configure symfony project
 - name: Start project creation
   debug: 
@@ -19,17 +18,13 @@
   become_user: vagrant
   when: stat_project.stat.exists == false
 
-- name: Get updated files from git repository
-  git:
-    repo: "{{ src_repo }}"
-    dest: "{{ web_path }}"
-  when: stat_project.stat.exists == true
-
 # Symfony 5
 - name: Create symfony5 project
   composer:
     command: install
     arguments: --no-interaction
+    args:
+      chdir: "{{ web_path }}"
     working_dir: "{{ web_path }}"
     prefer_dist: yes
   environment:
@@ -55,16 +50,16 @@
 
 ##################################################
 ### Configure nginx
-- name: Copy new virtual hosts file.
-  template:
-    src: nginx_project_vhost_symfony{{ symfony_major_version }}.skel
-    dest: /etc/nginx/sites-available/{{ projectname }}
-    force: no
+# - name: Copy new virtual hosts file.
+#   template:
+#     src: nginx_project_vhost_symfony{{ symfony_major_version }}.skel
+#     dest: /etc/nginx/sites-available/{{ projectname }}
+#     force: no
 
-- name: Enable new virtual hosts file.
-  file:
-    src: /etc/nginx/sites-available/{{ projectname }}
-    dest: /etc/nginx/sites-enabled/{{ projectname }}
-    state: link
-  notify:
-   - restart nginx
+# - name: Enable new virtual hosts file.
+#   file:
+#     src: /etc/nginx/sites-available/{{ projectname }}
+#     dest: /etc/nginx/sites-enabled/{{ projectname }}
+#     state: link
+#   notify:
+#    - restart nginx

@@ -1,3 +1,5 @@
+mysql_repo: http://repo.mysql.com/apt/debian/ buster mysql-8.0
+root_password: root
 mysql_user: ecommerce
 mysql_pw: ecommerce
 mysql_db: ecoservice_db

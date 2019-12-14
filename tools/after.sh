@@ -1,2 +1,3 @@
 apt autoremove python && apt autoremove ansible
-rm -rf ansible
+rm -rf /vagrant/.ansible
+# rm -rf /tmp/*
