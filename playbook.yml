@@ -1,17 +1,19 @@
  - hosts: all
-   vars:
-    passfile: "/etc/ssl/global.pass"
+   vars_files:
+    - vars/globals.yml
+    - vars/mysql.yml
+    - vars/mailer.yml
    roles:
     - { role: basics }
     - { role: updates }
     - { role: nginx }
     - { role: php }
-    - { role: mysql }
+    # - { role: mysql }
     # - { role: redis }
     - { role: nodejs }
     - { role: tests, when: testing_mode == 1 }
     - { role: symfony, when: projectname != 0 }
-    - { role: clean}
+    - { role: clean }
    post_tasks:
     - service: 
         name: nginx

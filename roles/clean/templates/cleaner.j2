@@ -1,0 +1,8 @@
+{% if nfs == false %}
+    sudo rm -rf /vagrant/playbook
+{% endif %}
+
+# uncomment if your not in debug mode
+sudo apt -y autoremove ansible
+sudo apt -y autoremove python
+sudo rm -rf /tmp/ansible

@@ -1,0 +1,20 @@
+php_config_file: "/etc/php/{{ php_version }}/fpm/php.ini"
+
+# [PHP]
+upload_max_filesize: 16M 
+post_max_size: 48M 
+memory_limit: 128M 
+max_execution_time: '100' 
+max_input_vars: '2000' 
+max_input_time: '800'
+
+realpath_cache_size: '4096K'
+realpath_cache_ttl: '600'
+
+# [opcache]
+opcache:
+  enable: '1'
+  preload: "{{web_dir}}/var/cache/prod/App_KernelProdContainer.preload.php"
+  memory_consumption: '256'
+  max_accelerated_files: '20000'
+  validate_timestamps: '1'

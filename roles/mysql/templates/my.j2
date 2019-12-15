@@ -1,0 +1,13 @@
+# {{ ansible_managed }}
+[mysqld]
+socket=/var/lib/mysql/mysql.sock
+user=root
+password={{ mysql_root_password }}
+bind-address = {{ mysql_bind_address }}
+mysqlx-bind-address = {{ mysql_bind_address }}
+default_authentication_plugin= {{ auth_plugin }}
+{% if mysql_sql_mode %}
+sql_mode = {{ mysql_sql_mode }}
+{% else %}
+sql_mode = ''
+{% endif %}

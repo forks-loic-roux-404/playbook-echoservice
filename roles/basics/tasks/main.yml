@@ -16,40 +16,33 @@
       - apt-transport-https
       - ca-certificates
       - imagemagick
-      - python-openssl
     state: present
-
-- set_fact: 
-    nfs_enabled: "{{ nfs }}"
     
 - name: Install NFS server
   apt:
     pkg:
       - nfs-kernel-server
-      - portmap
+      - nfs-common
     state: present
-  when: nfs_enabled == true
+  when: nfs == true
 
 ### Convenience
 - name: Configure inputrc / vimrc and motd for root
+  become: yes
   template: 
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
-  with_items:
+  loop:
    - { src: inputrc, dest: /root/.inputrc }
    - { src: vimrc, dest: /root/.vimrc }
    - { src: inputrc, dest: /home/vagrant/.inputrc }
    - { src: vimrc, dest: /home/vagrant/.vimrc }
    - { src: motd, dest: /etc/motd }
-   - { src: aliases, dest: /home/vagrant/.bash_profile }
+   - { src: bashrc, dest: /home/vagrant/.bashrc }
+   - { src: aliases, dest: /home/vagrant/.bash_aliases }
+  force: yes
   
 - name: Set new welcome message  
   shell: |
     echo "PrintLastLog no" >> /etc/ssh/sshd_config
     rm -rf /etc/update-motd.d/*
-
-- name: key pathfile create 
-  file: 
-    path: "{{ passfile }}"
-    state: touch
-

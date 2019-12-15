@@ -1,0 +1,3 @@
+---
+- name: load nfs
+  shell: sudo /etc/init.d/nfs-kernel-server start

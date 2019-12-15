@@ -1,0 +1,3 @@
+host: "{{ servername }}"
+dir: "/data/{{ projectname }}"
+web_dir: "{{ dir }}/{{ web_path }}"

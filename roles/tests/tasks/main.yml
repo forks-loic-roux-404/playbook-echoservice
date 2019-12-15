@@ -4,7 +4,7 @@
   service: 
     name: "{{ item }}"
     state: restarted
-  with_items:
+  loop:
   - nginx
   - php{{ php_version }}-fpm
 

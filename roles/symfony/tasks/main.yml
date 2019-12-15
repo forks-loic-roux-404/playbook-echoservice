@@ -1,65 +1,64 @@
-### Configure symfony project
-- name: Start project creation
-  debug: 
-    msg: "{{ projectname }}"
+---
+- set_fact:
+    app_secret: "{{ lookup('password', '/dev/null length=32 chars=ascii_letters') }}"
 
-- set_fact: 
-    symfony_major_version: "{{ symfony_version | int }}"
-
-- name: Check if project already exists
+- name: Check if composer project is initialized
   stat:
-    path: "{{ web_path }}"
+    path: "{{ web_dir }}"
   register: stat_project
 
+# - name: Stat project
+#   debug: 
+#     msg: "{{ stat_project }}"
+
 - name: Create project directory
+  become: yes
   file:
-    path: "{{ web_path }}"
+    path: "/data"
     state: directory
-  become_user: vagrant
+    owner: vagrant
+    group: vagrant
   when: stat_project.stat.exists == false
+
+- name: Prepare fresh directory
+  file:
+    path: "{{ dir }}"
+    state: absent
+  when: stat_project.stat.exists == true
+
+- name: Clone the code repository to the docroot.
+  git:
+    repo: "{{ src_repo }}"
+    dest: "{{ dir }}"
+  become_user: vagrant
+
+- name:  Generate .env
+  template:
+    src: .env.j2
+    dest: "{{ web_dir }}/.env"
+  become_user: vagrant
 
 # Symfony 5
 - name: Create symfony5 project
   composer:
     command: install
-    arguments: --no-interaction
-    args:
-      chdir: "{{ web_path }}"
-    working_dir: "{{ web_path }}"
+    working_dir: "{{ web_dir }}"
     prefer_dist: yes
   environment:
     APP_ENV: "{{ app_env }}"
   become_user: vagrant
   register: new_symfony_project
-  when: stat_project.stat.exists == false and symfony_major_version == "5"
+  ignore_errors: yes
 
-# - name:  Install composer
-#   command: composer install --no-interaction
-#   args:
-#     chdir: "{{ web_path }}"
-#   become_user: vagrant
-#   when: new_symfony_project.changed and symfony_major_version == "5"
-
-# Clean solution, but with problems on Linux hosts
-# - name: Install composer
-#   composer:
-#     command: install
-#     working_dir: "{{ web_path }}"
-#   become_user: vagrant
-#   when: new_symfony_project.changed
-
-##################################################
-### Configure nginx
-# - name: Copy new virtual hosts file.
-#   template:
-#     src: nginx_project_vhost_symfony{{ symfony_major_version }}.skel
-#     dest: /etc/nginx/sites-available/{{ projectname }}
-#     force: no
-
-# - name: Enable new virtual hosts file.
-#   file:
-#     src: /etc/nginx/sites-available/{{ projectname }}
-#     dest: /etc/nginx/sites-enabled/{{ projectname }}
-#     state: link
-#   notify:
-#    - restart nginx
+- name: Copy new virtual hosts file.
+  template:
+    src: default.skel
+    dest: /etc/nginx/sites-available/{{ projectname }}
+ 
+- name: Enable new virtual hosts file.
+  file:
+    src: /etc/nginx/sites-available/{{ projectname }}
+    dest: /etc/nginx/sites-enabled/{{ projectname }}
+    state: link
+  notify:
+   - restart nginx

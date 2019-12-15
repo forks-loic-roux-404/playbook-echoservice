@@ -1,9 +1,9 @@
 server {
     #listen 443 ssl;
-    listen 80 default_server;
+    listen 80;
 
     server_name  localhost;
-    root         {{ web_path }}/public/;
+    root         {{ web_dir }}/public/;
 
     location / {
         try_files $uri /index.php$is_args$args;
@@ -15,8 +15,8 @@ server {
         include fastcgi_params;
 
         fastcgi_param APP_ENV {{ app_env }};
-        # fastcgi_param APP_SECRET <app-secret-id>;
-        # fastcgi_param DATABASE_URL "mysql://ecommerce:ecommerce@host:3306/db_name";
+        fastcgi_param APP_SECRET {{ app_secret }};
+        fastcgi_param DATABASE_URL {{ mysql_url }};
 
         fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
         fastcgi_param DOCUMENT_ROOT $realpath_root;

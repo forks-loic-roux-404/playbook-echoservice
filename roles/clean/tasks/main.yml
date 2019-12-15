@@ -1,8 +1,20 @@
-- name: Remove python openssl
-  apt: 
-    pkg:
-      - python-openssl
+- name: Ensure we deleted default nginx welcome page
+  file: 
+    path: "/etc/nginx/sites-enabled/default"
     state: absent
+    force: yes
+  become: true
+  notify:
+   - restart nginx
+
+- name: Delete nginx default conf
+  file: 
+    path: "/etc/nginx/conf.d/default.conf"
+    state: absent
+    force: yes
+  become: true
+  notify:
+   - restart nginx
 
 - name: Update and upgrade apt packages
   become: true
@@ -11,11 +23,19 @@
     update_cache: yes
     cache_valid_time: 86400
  
-# sudo apt-get autoremove
 - name: Remove dependencies that are no longer required
   apt:
     autoremove: yes
     purge: yes
     force: yes
+    update_cache: true
+  become: true
+  tags:
+    - system
+
+- name: Build script to clean everything
+  template: 
+    src: cleaner.j2
+    dest: ../../../tools/cleaner.sh
   tags:
     - system

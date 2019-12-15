@@ -1,5 +1,16 @@
-mysql_repo: http://repo.mysql.com/apt/debian/ buster mysql-8.0
-root_password: root
-mysql_user: ecommerce
-mysql_pw: ecommerce
-mysql_db: ecoservice_db
+# mysql setup
+
+mysql_version: 8.0
+#mysql_repo: mysql{{ mysql_version|string |replace(".", "") }}-community
+mysql_root_password: ''
+
+mysql_host: remotemysql.com
+mysql_user: EmwnLitSLR
+mysql_pw: ErmHWlzuEI
+mysql_db: eEmwnLitSLR
+
+# my cnf
+mysql_config_file: /etc/my.cnf
+mysql_bind_address: "127.0.0.1"  #localhost default
+auth_plugin: mysql_native_password
+mysql_sql_mode: ''
