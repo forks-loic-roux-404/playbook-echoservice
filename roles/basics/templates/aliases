@@ -13,33 +13,33 @@ alias ci="composer install"
 # Npm aliases
 alias yw="yarn watch"
 alias yd="yarn dev"
-alias yi="yarn remove" 
+alias yi="yarn add" 
 
 # MACHINE SPECIFIC ALIAS'S
-
-# Alias's for SSH
-# alias SERVERNAME='ssh YOURWEBSITE.com -l USERNAME -p PORTNUMBERHERE'
 
 # Alias's to change the directory
 alias web='cd /data/{{ projectname }}/www'
 
 # GENERAL ALIAS'S
 
-# alias to show the date
-alias da='date "+%Y-%m-%d %A %T %Z"'
-
+# search in all files 
+alias ftext="ftext"
+# create dir an go to
+alias mkdirg="mkdirg"
 # Alias's to modified commands
 alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -iv'
 alias mkdir='mkdir -p'
+alias vi='sudo vim'
+
 alias ps='ps auxf'
 alias ping='ping -c 10'
 alias cls='clear'
 alias apt-get='sudo apt-get'
 alias apt='sudo apt'
 alias freshclam='sudo freshclam'
-alias vi='sudo vim'
+
 
 # Change directory aliases
 alias cd..='cd ..'
@@ -59,6 +59,7 @@ alias ldir="ls -l | egrep '^d'" # directories only
 
 # alias chmod commands
 alias mx='chmod a+x'
+alias 600='chmod -R 600'
 alias 644='chmod -R 644'
 alias 666='chmod -R 666'
 alias 755='chmod -R 755'
@@ -73,9 +74,6 @@ alias topcpu="/bin/ps -eo pcpu,pid,user,args | sort -k 1 -r | head -10"
 
 # Search files in the current folder
 alias f="find . | grep "
-
-# Count all files (recursively) in the current folder
-alias countfiles="for t in files links directories; do echo \`find . -type \${t:0:1} | wc -l\` \$t; done 2> /dev/null"
 
 # To see if a command is aliased, a file, or a built-in command
 alias checkcommand="type -t"

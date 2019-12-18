@@ -1,0 +1,4 @@
+prune_php_versions:
+  - 7.0
+  - 7.1
+  - 5.6

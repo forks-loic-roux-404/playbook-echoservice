@@ -16,6 +16,11 @@
   notify:
    - restart nginx
 
+- name: clean php older installs
+  become: true
+  shell: 'apt purge php{{ item }} libapache2-mod-php{{ item }} && rm -rf /etc/php/php{{ item }}'
+  loop: "{{ prune_php_versions }}"
+
 - name: Update and upgrade apt packages
   become: true
   apt:
@@ -34,8 +39,6 @@
     - system
 
 - name: Build script to clean everything
-  template: 
+  template:
     src: cleaner.j2
-    dest: ../../../tools/cleaner.sh
-  tags:
-    - system
+    dest: /tmp/cleaner.sh

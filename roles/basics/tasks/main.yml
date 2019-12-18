@@ -32,7 +32,7 @@
   template: 
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
-  loop:
+  with_items:
    - { src: inputrc, dest: /root/.inputrc }
    - { src: vimrc, dest: /root/.vimrc }
    - { src: inputrc, dest: /home/vagrant/.inputrc }
@@ -40,7 +40,6 @@
    - { src: motd, dest: /etc/motd }
    - { src: bashrc, dest: /home/vagrant/.bashrc }
    - { src: aliases, dest: /home/vagrant/.bash_aliases }
-  force: yes
   
 - name: Set new welcome message  
   shell: |

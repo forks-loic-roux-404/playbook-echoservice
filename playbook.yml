@@ -6,6 +6,7 @@
    roles:
     - { role: basics }
     - { role: updates }
+    - { role: ssl }
     - { role: nginx }
     - { role: php }
     # - { role: mysql }

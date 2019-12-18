@@ -1,0 +1,1 @@
+fork of : https://github.com/jdauphant/ansible-role-ssl-certs that is licensed under BSD 2-Clause "Simplified" License

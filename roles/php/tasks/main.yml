@@ -18,19 +18,6 @@
     autoremove: yes
   when: php_installed.stdout != "0"
 
-- name: remove unused php binaries
-  apt:  
-    purge: yes
-    pkg: 
-      - php5.6
-      - libapache2-mod-php5.6
-      - php7.0
-      - libapache2-mod-php7.0
-      - php7.1
-      - libapache2-mod-php7.1
-    state: absent
-  become: yes
-
 ### Install and configure PHP
 - name: Add apt key for Debian
   apt_key:
