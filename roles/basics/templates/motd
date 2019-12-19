@@ -2,7 +2,7 @@
                           |    
                     /)    |   VM By L'asticot 
   .-""--.....__...,-'/    |   ----------------------
- ( ("""`----......--'     |   Symfony 5.0.1-Stable : ({{ web_dir }}) 
+ ( ("""`----......--'     |   Symfony 5.+ Stable on ({{ web_dir }}) 
   `.`._                   |   mysql 5.7 (remotemysql)
     `-.`-._               |   composer 1.9 | phpunit
        `.//`-._           |   nodejs 12-LTS | yarn 1.12
