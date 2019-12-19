@@ -2,9 +2,9 @@ server {
     listen 443 ssl;
     listen 80;
 
-    include {{ ssl_nginx_server_conf }} localhost;
+    include {{ ssl_nginx_server_conf }};
 
-    server_name  {{ servername }};
+    server_name  {{ servername }} localhost;
     root         {{ web_dir }}/public/;
 
     location / {

@@ -188,14 +188,13 @@ function __setprompt
 	#PS1+="\[${DARKGRAY}\](\[${CYAN}\]\$(date +%a) $(date +%b-'%-m')" # Date
 	PS1+="\[${DARKGRAY}\](\[${BLUE}\]\$(date +%R)\[${DARKGRAY}\])-" # Time
 
-	# Jobs
-	PS1+="\[${DARKGRAY}\]:\[${MAGENTA}\]\j"
-
 	# Network Connections (for a server - comment out for non-server)
 	#PS1+="\[${DARKGRAY}\]:\[${MAGENTA}\]Net $(awk 'END {print NR}' /proc/net/tcp)"
 
 	# CPU
 	PS1+="(\[${MAGENTA}\]CPU $(cpu)%"
+	# Jobs
+	PS1+="\[${DARKGRAY}\]:\[${MAGENTA}\]\j"
 	
 	PS1+="\[${DARKGRAY}\])-"
 
