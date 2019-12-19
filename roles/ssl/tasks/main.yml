@@ -90,7 +90,19 @@
     src: "{{ ssl_certs_path }}"
     regexp: "({{ (ssl_certs_privkey_path | basename) | regex_escape }}|{{ (ssl_certs_cert_path | basename) | regex_escape }})"
   tags: [ssl-certs,configuration]
-######
-- name: update nginx conf
-  
 
+  ######
+
+- name: Create SSL nginx conf folder
+  become: yes
+  file:
+    path: "{{ ssl_nginx_conf_path }}"
+    state: directory
+
+- name: Create SSL nginx conf files
+  template: 
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+   - { src: nginx.conf.j2, dest: "{{ ssl_nginx_main_conf }}" }
+   - { src: server.conf.j2, dest: "{{ ssl_nginx_server_conf }}" }

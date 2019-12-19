@@ -2,7 +2,7 @@ server {
     listen 443 ssl;
     listen 80;
 
-    include snippets/ssl-params.conf;
+    include {{ ssl_nginx_server_conf }} localhost;
 
     server_name  {{ servername }};
     root         {{ web_dir }}/public/;

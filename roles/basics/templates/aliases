@@ -1,24 +1,25 @@
-
-# Symfony aliases
-alias sf="php bin/console "
-alias sfcache="sf cache:clear"
-alias sfwarm="sf cache:warmup"
-alias dschema="sf doctrine:schema:update"
-
-# Composer installer
-alias cr="composer require"
-alias crd="composer require-dev" 
-alias ci="composer install" 
-
-# Npm aliases
-alias yw="yarn watch"
-alias yd="yarn dev"
-alias yi="yarn add" 
-
 # MACHINE SPECIFIC ALIAS'S
+# Search running processes
+alias p="ps aux | grep "
+alias topcpu="/bin/ps -eo pcpu,pid,user,args | sort -k 1 -r | head -10"
 
-# Alias's to change the directory
-alias web='cd /data/{{ projectname }}/www'
+# Search files in the current folder
+alias f="find . | grep "
+
+# To see if a command is aliased, a file, or a built-in command
+alias checkcommand="type -t"
+
+# Show current network connections to the server
+alias ipview="netstat -anpl | grep :80 | awk {'print \$5'} | cut -d\":\" -f1 | sort | uniq -c | sort -n | sed -e 's/^ *//' -e 's/ *\$//'"
+
+# Show open ports
+alias openports='netstat -nape --inet'
+
+# Alias's to show disk space and space used in a folder
+alias diskspace="du -S | sort -n -r |more"
+alias folders='du -h --max-depth=1'
+alias folderssort='find . -maxdepth 1 -type d -print0 | xargs -0 du -sk | sort -rn'
+alias mountedinfo='df -hT'
 
 # GENERAL ALIAS'S
 
@@ -38,8 +39,6 @@ alias ping='ping -c 10'
 alias cls='clear'
 alias apt-get='sudo apt-get'
 alias apt='sudo apt'
-alias freshclam='sudo freshclam'
-
 
 # Change directory aliases
 alias cd..='cd ..'
@@ -68,24 +67,21 @@ alias 777='chmod -R 777'
 # Search command line history
 alias h="history | grep "
 
-# Search running processes
-alias p="ps aux | grep "
-alias topcpu="/bin/ps -eo pcpu,pid,user,args | sort -k 1 -r | head -10"
+# Alias's to change the directory
+alias www='cd /data/{{ projectname }}/www'
 
-# Search files in the current folder
-alias f="find . | grep "
+# Symfony aliases
+alias sf="php bin/console "
+alias sfcache="sf cache:clear"
+alias sfwarm="sf cache:warmup"
+alias dschema="sf doctrine:schema:update"
 
-# To see if a command is aliased, a file, or a built-in command
-alias checkcommand="type -t"
+# Composer installer
+alias cr="composer require"
+alias crd="composer require-dev" 
+alias ci="composer install" 
 
-# Show current network connections to the server
-alias ipview="netstat -anpl | grep :80 | awk {'print \$5'} | cut -d\":\" -f1 | sort | uniq -c | sort -n | sed -e 's/^ *//' -e 's/ *\$//'"
-
-# Show open ports
-alias openports='netstat -nape --inet'
-
-# Alias's to show disk space and space used in a folder
-alias diskspace="du -S | sort -n -r |more"
-alias folders='du -h --max-depth=1'
-alias folderssort='find . -maxdepth 1 -type d -print0 | xargs -0 du -sk | sort -rn'
-alias mountedinfo='df -hT'
+# Npm aliases
+alias yw="yarn watch"
+alias yd="yarn dev"
+alias yi="yarn add" 
