@@ -1,5 +1,5 @@
-##################################################
-### Pre-checks
+### Variable depending on env
+- include_vars: "../defaults/php_ini_{{ app_env }}.yml"
 
 - name: Check installed PHP version
   shell: 'dpkg --list | grep php | grep "^ii" | wc -l'
@@ -38,7 +38,6 @@
     - php{{ php_version }}-fpm
     - php{{ php_version }}-mysql
     - php{{ php_version }}-sqlite3
-#    - php{{ php_version }}-mcrypt # outdated since php 7.2
     - php{{ php_version }}-cli
     - php{{ php_version }}-curl
     - php{{ php_version }}-gd
@@ -56,7 +55,6 @@
     - php{{ php_version }}-igbinary
     - php{{ php_version }}-bcmath
     - php{{ php_version }}-imagick
-#    - php{{ php_version }}-memcache # outdated since php 7.3
     - php{{ php_version }}-memcached
     #- php{{ php_version }}-mongodb
     - php{{ php_version }}-msgpack
@@ -93,7 +91,26 @@
 #   notify:
 #    - restart php-fpm
 
-- include: xdebug.yml
+- name: Copy xdebug ini into main extension config folder.
+  template:
+    src: xdebug.ini.j2
+    dest: "{{ php_xdebug.module_path }}/20-xdebug.ini"
+    owner: root
+    group: root
+    mode: 0644
+  when: php_xdebug.cli_disable != true
+  notify:
+    - restart php-fpm
+    - restart nginx
+
+- name: Disable xdebug for PHP CLI.
+  file:
+    path: "{{ php_xdebug.module_path }}/20-xdebug.ini"
+    state: absent
+  when: php_xdebug.cli_disable == true
+  notify:
+    - restart php-fpm
+    - restart nginx
 
 - name: Start PHP-FPM and enable the service in autostart
   service:
@@ -120,9 +137,6 @@
 
 - name: Rename Composer
   shell: mv -f {{ composer_path }}/composer.phar {{ composer_path }}/composer
-
-- name: Php config variables
-  include_vars: "../defaults/php_ini_{{ app_env }}.yml"
 
 - name: php.ini configuration
   template: 
