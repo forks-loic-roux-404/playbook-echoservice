@@ -14,7 +14,24 @@ realpath_cache_ttl: '600'
 # [opcache]
 opcache:
   enable: '1'
-  preload: "{{web_dir}}/var/cache/prod/App_KernelProdContainer.preload.php"
+  preload:  "{{web_dir}}/var/cache/prod/App_KernelProdContainer.preload.php"
   memory_consumption: '256'
   max_accelerated_files: '20000'
   validate_timestamps: '1'
+  interned_strings_buffer: '10MB'
+  fast_shutdown: '1'
+  force_restart_timeout: '60'
+  error_log: '0'
+
+# [extensions]
+php_xdebug_default_enable: 0
+php_xdebug_coverage_enable: 0
+php_xdebug_module_path: /etc/php/{{ php_version }}/fpm/conf.d
+php_xdebug_cli_disable: false
+
+php_xdebug_remote_enable: "false"
+php_xdebug_remote_connect_back: "false"
+php_xdebug_remote_host: localhost
+php_xdebug_remote_port: "9000"
+php_xdebug_remote_log: /tmp/xdebug.log
+php_xdebug_remote_autostart: "false"

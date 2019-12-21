@@ -51,7 +51,7 @@
     - php{{ php_version }}-xsl
     - php{{ php_version }}-zip
     - php{{ php_version }}-bz2
-    #- php{{ php_version }}-redis
+    - php{{ php_version }}-redis
     - php{{ php_version }}-gmp
     - php{{ php_version }}-igbinary
     - php{{ php_version }}-bcmath
@@ -61,7 +61,6 @@
     #- php{{ php_version }}-mongodb
     - php{{ php_version }}-msgpack
     - php{{ php_version }}-pspell
-    #- php{{ php_version }}-redis
     - php{{ php_version }}-ssh2
     - php{{ php_version }}-xmlrpc
     - php{{ php_version }}-common
@@ -86,12 +85,15 @@
   notify:
    - restart php-fpm
 
-- name: Configure xDebug
-  template:
-    src: 20-xdebug.ini
-    dest: /etc/php/{{ php_version }}/fpm/conf.d/20-xdebug.ini
-  notify:
-   - restart php-fpm
+# - name: Configure xDebug
+#   template:
+#     src: 20-xdebug.ini
+#     dest: /etc/php/{{ php_version }}/fpm/conf.d/20-xdebug.ini
+#   ignore_errors: yes
+#   notify:
+#    - restart php-fpm
+
+- include: xdebug.yml
 
 - name: Start PHP-FPM and enable the service in autostart
   service:
@@ -99,7 +101,6 @@
     state: started
     enabled: yes
 
-##################################################
 ### Install PHPUnit
 - name: Install PHPUnit
   get_url:
@@ -130,5 +131,4 @@
     owner: root
     group: root
     mode: 0644
-    #force: true
   notify: restart php-fpm
