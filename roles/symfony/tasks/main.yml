@@ -4,7 +4,7 @@
 
 - name: Check if composer project is initialized
   stat:
-    path: "{{ web_dir }}"
+    path: "{{ dir }}"
   register: stat_project
 
 # - name: Stat project
@@ -21,6 +21,7 @@
   when: stat_project.stat.exists == false
 
 - name: Prepare fresh directory
+  become: yes
   file:
     path: "{{ dir }}"
     state: absent

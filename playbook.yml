@@ -9,7 +9,7 @@
     - { role: ssl }
     - { role: nginx }
     - { role: php }
-    # - { role: mysql }
+    #- { role: mysql }
     - { role: redis }
     - { role: nodejs }
     - { role: tests, when: testing_mode == 1 }
