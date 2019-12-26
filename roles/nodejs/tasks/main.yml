@@ -55,3 +55,7 @@
    pkg: 
     - yarn
    state: present
+
+- name: yarn install
+  yarn:
+    path: "{{ web_dir }}"

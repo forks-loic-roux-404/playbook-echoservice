@@ -33,15 +33,10 @@
     dest: "{{ dir }}"
   become_user: vagrant
 
-- name: Prepare fresh directory
+- name: remove git repo
   file:
     path: "{{ dir }}/.git"
     state: absent
-
-- name: Touch .env
-  file:
-    path: "{{ web_dir }}/.env"
-    state: touch
 
 # Symfony 5
 - name: Create symfony5 project
@@ -55,15 +50,9 @@
   register: new_symfony_project
   ignore_errors: yes
 
-- name:  Generate .env
-  template:
-    src: .env.j2
-    dest: "{{ web_dir }}/.env"
-  become_user: vagrant
-
 - name: Copy new virtual hosts file.
   template:
-    src: default.skel
+    src: default.conf
     dest: /etc/nginx/sites-available/{{ projectname }}
  
 - name: Enable new virtual hosts file.

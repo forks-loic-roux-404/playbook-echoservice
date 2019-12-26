@@ -2,7 +2,19 @@ host: "{{ servername }}"
 dir: "/data/{{ projectname }}"
 web_dir: "{{ dir }}/{{ web_path }}"
 
-# ssl
+# ssl (used in nginx conf)
 ssl_nginx_conf_path: "/etc/nginx/ssl"
 ssl_nginx_main_conf : "{{ ssl_nginx_conf_path }}/ssl_main.conf"
 ssl_nginx_server_conf : "{{ ssl_nginx_conf_path }}/ssl_{{ projectname }}.conf"
+
+# mysql globals
+mysql_user: ecs_user
+mysql_pw: ecommerce
+mysql_host: localhost
+mysql_db: ecommerce
+mysql_port: 3306
+mysql_url: "mysql://{{ mysql_user }}:{{ mysql_pw }}@{{ mysql_host }}/{{ mysql_db }}"
+
+# mailer
+mail_user: andregope999@gmail.com
+mail_pw: ecoserviceMailer69

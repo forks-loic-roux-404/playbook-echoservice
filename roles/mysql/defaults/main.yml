@@ -1,16 +1,38 @@
-# mysql setup
+---
+# Maria db Config
+mariadb_version: 10.4 # last stable
 
-mysql_version: 8.0
-#mysql_repo: mysql{{ mysql_version|string |replace(".", "") }}-community
-mysql_root_password: ''
+# General settings
+mysql_max_allowed_packet: '64M'
+mysql_max_connections: 100
 
-mysql_host: remotemysql.com
-mysql_user: EmwnLitSLR
-mysql_pw: ErmHWlzuEI
-mysql_db: eEmwnLitSLR
+# Both of these values are set for faster row lock handling out of the box. They are not the mysql / mariadb defaults.
+mysql_transaction_isolation: 'READ-COMMITTED'
+mysql_binlog_format: 'ROW'
+
+mysql_tmpdir: /tmp
+mysql_datadir: /data/mysql
+
+# Logs
+mysql_expire_logs_days: 10
+mysql_general_log_file: /var/log/mysql/mysql.log
+mysql_general_log: 0
+mysql_slow_query_log: 0
+mysql_slow_query_log_file: /var/log/mysql/mariadb-slow.log
+mysql_long_query_time: 10
+
+mysql_root_user: root
+mysql_root_password: root
 
 # my cnf
-mysql_config_file: /etc/my.cnf
+mysql_config_file: /etc/mysql/.my.cnf
 mysql_bind_address: "127.0.0.1"  #localhost default
-auth_plugin: mysql_native_password
-mysql_sql_mode: ''
+
+# for cron backup
+backup_user: EmwnLitSLR
+backup_pw: Gk0qCm6hFI
+backup_host: remotemysql.com
+backup_db: EmwnLitSLR
+backup_url: "mysql://{{ backup_user }}:{{ backup_pw }}@{{ backup_host }}/{{ backup_db }}"
+
+cron_workspace: /data/cr_wk

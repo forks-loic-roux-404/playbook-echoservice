@@ -16,9 +16,18 @@
   notify:
    - restart nginx
 
-- name: clean php older installs
+- name: Remove python db manager
+  apt:
+    pkg:
+      - python-pymysql
+    update_cache: yes
+    state: absent
+
+- name: clean olders php installs
   become: yes
-  shell: 'apt purge php{{ item }} libapache2-mod-php{{ item }} && rm -rf /etc/php/php{{ item }}'
+  shell: |
+    "apt purge php{{ item }} libapache2-mod-php{{ item }} 
+    rm -rf /etc/php/php{{ item }}"
   loop: "{{ prune_php_versions }}"
 
 - name: Update and upgrade apt packages

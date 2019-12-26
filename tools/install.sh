@@ -11,7 +11,7 @@ if [ "$ansible_installed" -eq 0 ]; then
 
   # Add ansible 2.6 repository and install ansible
   sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
-  echo "deb http://ppa.launchpad.net/ansible/ansible-2.9/ubuntu xenial main" | sudo tee /etc/apt/sources.list.d/ansible.list
+  echo "deb http://ppa.launchpad.net/ansible/ansible-2.9/debian buster main" | sudo tee /etc/apt/sources.list.d/ansible.list
   sudo apt update -y
   sudo apt install -y ansible
 

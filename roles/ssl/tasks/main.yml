@@ -92,7 +92,6 @@
   tags: [ssl-certs,configuration]
 
   ######
-
 - name: Create SSL nginx conf folder
   become: yes
   file:
@@ -104,5 +103,5 @@
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
   with_items:
-   - { src: nginx.conf.j2, dest: "{{ ssl_nginx_main_conf }}" }
-   - { src: server.conf.j2, dest: "{{ ssl_nginx_server_conf }}" }
+   - { src: nginx.conf, dest: "{{ ssl_nginx_main_conf }}" }
+   - { src: server.conf, dest: "{{ ssl_nginx_server_conf }}" }

@@ -1,7 +1,0 @@
----
-
-mysql_host: remotemysql.com
-mysql_user: EmwnLitSLR
-mysql_pw: Gk0qCm6hFI
-mysql_db: EmwnLitSLR
-mysql_url: "mysql://{{ mysql_user }}:{{ mysql_pw }}@{{ mysql_host }}/{{ mysql_db }}"

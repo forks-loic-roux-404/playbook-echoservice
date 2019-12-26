@@ -30,11 +30,20 @@
     - { path: "/etc/nginx/sites-enabled", mode: 755, user: root, group: root }
     - { path: "/var/lib/nginx", mode: 777, user: vagrant, group: root }
     - { path: "/var/lib/nginx/tmp", mode: 777, user: vagrant, group: root }
+    - { path: "/var/run/{{ projectname }}", mode: 755, user: vagrant, group: root }
 
-- name: Copy nginx.conf
+- name: Build all config files
   template:
-    src: nginx.conf
-    dest: /etc/nginx/nginx.conf
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  loop:
+    - { src: nginx.conf, dest: /etc/nginx/nginx.conf }
+    - { src: proxy.conf, dest: "/etc/nginx/{{ projectname }}_proxy" }
+    - { src: gzip.conf, dest: /etc/nginx/conf.d/gzip }
+    - { src: brotli.conf, dest: /etc/nginx/conf.d/brotli }
+    # auto importing configs
+    - { src: settings.conf, dest: /etc/nginx/conf.d/settings.conf }
+    - { src: backends.conf, dest: /etc/nginx/conf.d/backends.conf }
 
 - name: Start Nginx and enable the service in autostart
   service:

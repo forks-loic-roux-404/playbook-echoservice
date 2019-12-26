@@ -83,14 +83,6 @@
   notify:
    - restart php-fpm
 
-# - name: Configure xDebug
-#   template:
-#     src: 20-xdebug.ini
-#     dest: /etc/php/{{ php_version }}/fpm/conf.d/20-xdebug.ini
-#   ignore_errors: yes
-#   notify:
-#    - restart php-fpm
-
 - name: Copy xdebug ini into main extension config folder.
   template:
     src: xdebug.ini.j2

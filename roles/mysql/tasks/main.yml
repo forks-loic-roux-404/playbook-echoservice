@@ -5,54 +5,44 @@
     path: /etc/init.d/mysql
   register: mysql_installed
 
-- name: Install APT extras
+- name: SQL install
+  block: 
+  - name: Add repository
+    block:
+    - name: Add apt key for MariaDB
+      apt_key:
+        keyserver: keyserver.ubuntu.com
+        id: F1656F24C74CD1D8
+        
+    - name: Add apt repo for MariaDB
+      apt_repository:
+        repo: deb [arch=amd64] http://mariadb.nethub.com.hk/repo/{{ mariadb_version }}/debian buster main
+        filename: mysql80
+        state: present
+
+  - name: Install MariaDB Server
+    apt:
+      name: mariadb-server
+      state: present
+      update_cache: yes
+  when: mysql_installed != true
+  # end SQL install block
+
+- name: Install/Update python db manager
   apt:
     pkg:
-      - dirmngr
-      - debconf    
-    update_cache: yes
-    state: latest
-
-- name: Add official MySQL package authentication key
-  apt_key:
-    keyserver: pool.sks-keyservers.net
-    id: 5072E1F5
-    state: present
-
-- name: Add MySQL repository
-  apt_repository:
-    repo: deb http://repo.mysql.com/apt/debian/ buster mysql-8.0
-    filename: mysql80
-    state: present
-
-- name: Set MySQL root password
-  debconf:
-    name: mysql-community-server
-    question: mysql-community-server/root-pass
-    value: "{{ mysql_root_password }}"
-    vtype: password
-
-- name: Confirm MySQL root password
-  debconf:
-    name: mysql-community-server
-    question: mysql-community-server/re-root-pass
-    value: "{{ mysql_root_password }}"
-    vtype: password
-
-- name: Enable Legacy Authentication Method
-  debconf:
-    name: mysql-community-server
-    question: mysql-server/default-auth-override
-    value: Use Legacy Authentication Method (Retain MySQL 5.x Compatibility)
-    vtype: select
-
-- name: Install/Update MySQL 8.0 Community Server
-  apt:
-    pkg:
-      - mysql-server
       - python-pymysql
     update_cache: yes
     state: latest
+
+- name: Save mysql root password credentials to /root/.my.cnf
+  become: yes
+  template: 
+    src: root.my.cnf.j2 
+    dest: /root/.my.cnf 
+    owner: root 
+    mode: 0600
+    backup: yes
 
 - name: Ensure mysql is running and starts on boot
   service:
@@ -61,45 +51,83 @@
     enabled: yes
   become: yes
 
+- name: Get list of hosts for the anonymous user.
+  command: mysql -NBe 'SELECT Host FROM mysql.user WHERE User = ""'
+  register: mysql_anonymous_hosts
+  changed_when: false
+  check_mode: no
+
+- name: Remove anonymous MySQL users.
+  mysql_user:
+      name: ""
+      host: "{{ item }}"
+      state: absent
+  with_items: "{{ mysql_anonymous_hosts.stdout_lines|default([]) }}"
+
+- name: Remove the test database
+  mysql_db:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    name: test
+    state: absent
+
 - name: my.cnf configuration
   template: 
     src: my.j2
     dest: "{{ mysql_config_file }}" 
     owner: root
     group: root
-    mode: 0644
+    mode: 0600
     force: true
   notify: restart mysql
 
-# - name: Ensure mysql root password is updated for all root accounts
-#   mysql_user:
-#     name: root
-#     host: "%"
-#     password: "{{ mysql_root_password }}"
-#     priv: '*.*:ALL,GRANT'
-#     check_implicit_admin: true
-#   become: yes
-#   notify: Restart MySQL
+- name: Root User Creation
+  mysql_user: 
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    name: "{{ mysql_root_user }}"
+    host: "%"
+    password: "{{ mysql_root_password }}"
+    priv: "*.*:ALL"
+    append_privs: true
+    state: present
+  when: mysql_root_password is defined
+      and mysql_root_password|trim != ''
 
-- name: User Creation
-  mysql_user:
+- name: "{{ projectname }} user add"
+  mysql_user: 
+    login_unix_socket: /var/run/mysqld/mysqld.sock
     name: "{{ mysql_user }}"
+    host: "{{ mysql_host }}"
     password: "{{ mysql_pw }}"
     priv: "*.*:ALL"
-    check_implicit_admin: yes
-    login_password: "{{ mysql_root_password }}"
+    append_privs: true
     state: present
 
 - name: Database creation
   mysql_db:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
     name: "{{ mysql_db }}"
     collation: utf8_general_ci
     encoding: utf8
     state: present
 
-# - name: Allow Ports
-#   ufw: 
-#     rule: allow
-#     port: "{{ item }}"
-#   with_items:
-#     - 3306
+- name: Cron dump db
+  block:
+  - name: folder
+    file:
+      path: "{{ cron_workspace }}"
+      state: directory
+      group: crontab
+      mode: 644
+
+  - name: dump script
+    template:
+      src: cron.sh
+      dest: "{{ cron_workspace }}/cron.sh"
+
+  - name: Dump database
+    become: yes
+    cron:
+      name: "dump database"
+      minute: "0"
+      hour: "2"
+      job: "{{ cron_workspace }}/cron.sh"
