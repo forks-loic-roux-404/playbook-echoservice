@@ -29,7 +29,6 @@ alias mkdir='mkdir -p'
 alias vi='sudo vim'
 alias tail='sudo tail'
 
-alias c='clear'
 alias apt-get='sudo apt-get'
 alias apt='sudo apt'
 

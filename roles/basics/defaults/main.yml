@@ -1,1 +1,1 @@
-permit_root_login: "{% if app_env == 'dev' %} 'yes' {% else %} 'no'{% endif %}"
+permit_root_login: "{% if app_env == 'dev' %} yes {% else %} no {% endif %}"

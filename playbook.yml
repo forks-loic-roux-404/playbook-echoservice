@@ -1,17 +1,18 @@
- - hosts: all
+ - hosts: default
    vars_files:
     - vars/globals.yml
    roles:
-    #- { role: basics }
-    #- { role: updates }
-    #- { role: ssl,  when: ssl!= false }
-    #- { role: nginx }
-    #- { role: php }
+    - { role: basics }
+    - { role: updates }
+    - { role: ssl,  when: ssl != false }
+    - { role: nginx }
+    - { role: php }
     - { role: mysql } # mariadb
-    #- { role: redis }
-    #- { role: nodejs }
-    #- { role: tests, when: testing_mode == 1 }
+    - { role: redis }
+    - { role: nodejs }
+    - { role: tests, when: testing_mode == 1 }
     - { role: symfony, when: projectname != 0 }
+    - { role: nfs, when: nfs != false}
     - { role: clean }
    post_tasks:
     - service: 

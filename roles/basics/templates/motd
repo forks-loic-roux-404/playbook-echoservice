@@ -3,9 +3,9 @@
                     /)    |   VM By L'asticot 
   .-""--.....__...,-'/    |   ----------------------
  ( ("""`----......--'     |   Symfony 5.+ Stable on ({{ web_dir }}) 
-  `.`._                   |   mysql 5.7 (remotemysql)
-    `-.`-._               |   composer 1.9 | phpunit
-       `.//`-._           |   nodejs 12-LTS | yarn 1.12
+  `.`._                   |   mariadb 10.4.11 (Stable)
+    `-.`-._               |   composer 1.9 | phpunit 8.5
+       `.//`-._           |   nodejs 12-LTS | yarn 1.21
          "`--._)          |   php7.4 | fpm - opcache - xdebug
                           |   nginx 1.17 mainline
   Welcome to Debian 10.2  |   

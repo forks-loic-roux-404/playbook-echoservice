@@ -110,24 +110,47 @@
     encoding: utf8
     state: present
 
-- name: Cron dump db
+- name: Cron dumping db
   block:
+  - name: log file
+    file:
+      path: "{{ cron_sql_log }}"
+      state: directory
+
   - name: folder
     file:
       path: "{{ cron_workspace }}"
       state: directory
-      group: crontab
-      mode: 644
+      mode: 755
 
   - name: dump script
     template:
       src: cron.sh
       dest: "{{ cron_workspace }}/cron.sh"
 
+  - name: correct chmod script
+    file:
+      path: "{{ cron_workspace }}/cron.sh"
+      owner: root
+      group: root
+      mode: 0700
+
   - name: Dump database
     become: yes
     cron:
       name: "dump database"
       minute: "0"
-      hour: "2"
-      job: "{{ cron_workspace }}/cron.sh"
+      hour: "6"
+      job: "{{ cron_workspace }}/cron.sh > {{ cron_sql_log }}"  
+
+  - name: Clear all dumps
+    become: yes
+    cron:
+      name: "clear all dump script"
+      minute: "59"
+      hour: "23"
+      job: "rm -rf {{ cron_workspace }}/ecs*"
+
+  - name: import remote db
+    shell: "/bin/bash {{ cron_workspace }}/cron.sh"
+    register: db_exist

@@ -25,9 +25,8 @@
 
 - name: clean olders php installs
   become: yes
-  shell: |
-    "apt purge php{{ item }} libapache2-mod-php{{ item }} 
-    rm -rf /etc/php/php{{ item }}"
+  ignore_errors: yes
+  shell: "apt purge php{{ item }} libapache2-mod-php{{ item }}"
   loop: "{{ prune_php_versions }}"
 
 - name: Update and upgrade apt packages

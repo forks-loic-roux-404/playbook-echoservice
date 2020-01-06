@@ -11,14 +11,19 @@
 #   debug: 
 #     msg: "{{ stat_project }}"
 
-- name: Create project directory
+- name: Init work folder
+  stat:
+    path: "/data"
+  register: stat_project_data
+
+- name: Setting up work directory
   become: yes
   file:
     path: "/data"
     state: directory
     owner: vagrant
     group: vagrant
-  when: stat_project.stat.exists == false
+    mode: 755
 
 - name: Prepare fresh directory
   become: yes

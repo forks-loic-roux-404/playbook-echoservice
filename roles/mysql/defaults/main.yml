@@ -35,4 +35,5 @@ backup_host: remotemysql.com
 backup_db: EmwnLitSLR
 backup_url: "mysql://{{ backup_user }}:{{ backup_pw }}@{{ backup_host }}/{{ backup_db }}"
 
-cron_workspace: /data/cr_wk
+cron_workspace: /data/.cr_wk
+cron_sql_log: /var/log/cron
