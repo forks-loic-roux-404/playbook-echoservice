@@ -1,0 +1,7 @@
+---
+nfs_server_daemon: nfs-kernel-server
+
+nfs_exports: [] # {{ webdir }} - too manual
+
+nfs_rpcbind_state: started
+nfs_rpcbind_enabled: true
