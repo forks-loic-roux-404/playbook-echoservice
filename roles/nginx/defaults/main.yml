@@ -2,3 +2,10 @@ nginx_release: mainline # 1.17 | 1.16 = stable
 
 # settings
 gzip_comp_level: 3
+
+# logs
+nginx_log_dir: "{{ log_project_dir }}"
+nginx_access_log: "{{ log_project_dir }}/access.log"
+nginx_error_log: "{{ log_project_dir }}/server_error.log"
+nginx_project_log: "{{ log_project_dir }}/app_{{ projectname }}.log"
+nginx_project_error_log: "{{ log_project_dir }}/app_{{ projectname }}.log"

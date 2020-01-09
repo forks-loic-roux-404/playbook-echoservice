@@ -1,7 +1,7 @@
 php_config_file: "/etc/php/{{ php_version }}/fpm/php.ini"
 
 # [PHP]
-upload_max_filesize: 86M 
+upload_max_filesize: 20M
 post_max_size: 32M 
 memory_limit: 256M 
 max_execution_time: '600' 
@@ -32,7 +32,7 @@ php_xdebug:
   remote_connect_back: "false"
   remote_host: localhost
   remote_port: "9000"
-  remote_log: /var/log/{{ projectname }}/xdebug.log
+  remote_log: "{{ log_project_dir }}/xdebug.log"
   remote_autostart: "false"
   max_nesting_level: 256
   cli_disable: true

@@ -16,15 +16,6 @@
     path: "/data"
   register: stat_project_data
 
-- name: Setting up work directory
-  become: yes
-  file:
-    path: "/data"
-    state: directory
-    owner: vagrant
-    group: vagrant
-    mode: 755
-
 - name: Prepare fresh directory
   become: yes
   file:
@@ -38,13 +29,8 @@
     dest: "{{ dir }}"
   become_user: vagrant
 
-- name: remove git repo
-  file:
-    path: "{{ dir }}/.git"
-    state: absent
-
 # Symfony 5
-- name: Create symfony5 project
+- name: Init symfony5 project
   composer:
     command: install
     working_dir: "{{ web_dir }}"
@@ -55,15 +41,24 @@
   register: new_symfony_project
   ignore_errors: yes
 
+- name: clean
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  loop:
+    - { path: .env }
+    - { path: .env.test }
+    - { path: "{{ dir }}/.git" }
+
 - name: Copy new virtual hosts file.
   template:
     src: default.conf
-    dest: /etc/nginx/sites-available/{{ projectname }}
+    dest: "/etc/nginx/sites-available/{{ projectname }}"
  
 - name: Enable new virtual hosts file.
   file:
-    src: /etc/nginx/sites-available/{{ projectname }}
-    dest: /etc/nginx/sites-enabled/{{ projectname }}
+    src: "/etc/nginx/sites-available/{{ projectname }}"
+    dest: "/etc/nginx/sites-enabled/{{ projectname }}"
     state: link
   notify:
    - restart nginx

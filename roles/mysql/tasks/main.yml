@@ -76,7 +76,7 @@
     dest: "{{ mysql_config_file }}" 
     owner: root
     group: root
-    mode: 0600
+    mode: 0400
     force: true
   notify: restart mysql
 
@@ -121,19 +121,16 @@
     file:
       path: "{{ cron_workspace }}"
       state: directory
+      owner: root
       mode: 755
 
   - name: dump script
     template:
       src: cron.sh
       dest: "{{ cron_workspace }}/cron.sh"
-
-  - name: correct chmod script
-    file:
-      path: "{{ cron_workspace }}/cron.sh"
       owner: root
-      group: root
-      mode: 0700
+      group: crontab
+      mode: 0550
 
   - name: Dump database
     become: yes
@@ -149,7 +146,7 @@
       name: "clear all dump script"
       minute: "59"
       hour: "23"
-      job: "rm -rf {{ cron_workspace }}/ecs*"
+      job: "rm -rf {{ cron_workspace }}/{{ projectname }}*"
 
   - name: import remote db
     shell: "/bin/bash {{ cron_workspace }}/cron.sh"

@@ -18,3 +18,8 @@ mysql_url: "mysql://{{ mysql_user }}:{{ mysql_pw }}@{{ mysql_host }}/{{ mysql_db
 # mailer
 mail_user: andregope999@gmail.com
 mail_pw: ecoserviceMailer69
+
+#logs
+log_dir: /data/logs
+log_project_dir: "{{ log_dir }}/{{ projectname }}"
+log_project_file: "{{ log_project_dir }}/app_{{ projectname }}.log"

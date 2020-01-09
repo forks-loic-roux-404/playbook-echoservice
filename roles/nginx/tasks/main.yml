@@ -31,6 +31,7 @@
     - { path: "/var/lib/nginx", mode: 777, user: vagrant, group: root }
     - { path: "/var/lib/nginx/tmp", mode: 777, user: vagrant, group: root }
     - { path: "/var/run/{{ projectname }}", mode: 755, user: vagrant, group: root }
+    - { path: "{{ nginx_log_dir }}", mode: 755, user: vagrant, group: vagrant }
 
 - name: Build all config files
   template:

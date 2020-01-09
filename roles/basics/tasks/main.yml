@@ -47,3 +47,12 @@
     path: /etc/update-motd.d/
     state: absent
   become: yes
+
+- name: Create logs dir
+  file:
+    path: "{{ log_project_dir }}"
+    state: directory
+    recurse: yes
+    owner: vagrant
+    group: vagrant
+    mode: 750

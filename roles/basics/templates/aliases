@@ -6,7 +6,7 @@ alias p="ps aux | grep "
 alias f="find . | grep "
 
 # Show current network connections to the server
-alias ipview="netstat -anpl | grep :80 | awk {'print \$5'} | cut -d\":\" -f1 | sort | uniq -c | sort -n | sed -e 's/^ *//' -e 's/ *\$//'"
+# alias ipview="netstat -anpl | grep :80 | awk {'print \$5'} | cut -d\":\" -f1 | sort | uniq -c | sort -n | sed -e 's/^ *//' -e 's/ *\$//'"
 
 # Show open ports
 alias openports='netstat -nape --inet'
@@ -44,14 +44,6 @@ alias ll='ls -Fls' # long listing format
 alias lf="ls -l | egrep -v '^d'" # files only
 alias ldir="ls -l | egrep '^d'" # directories only
 
-# alias chmod commands
-alias mx='chmod a+x'
-alias 600='chmod -R 600'
-alias 644='chmod -R 644'
-alias 666='chmod -R 666'
-alias 755='chmod -R 755'
-alias 777='chmod -R 777'
-
 # Search command line history
 alias h="history | grep "
 
@@ -61,16 +53,19 @@ alias www='cd /data/{{ projectname }}/www'
 # Symfony aliases
 alias sf="php bin/console "
 alias sfcache="sf cache:clear"
-alias sfwarm="sf cache:warmup"
-alias dschema="sf doctrine:schema:update"
+alias dschema="sf doctrine:schema:update -f"
 
-# Composer installer
-alias cr="composer require"
-alias crd="composer require-dev" 
-alias ci="composer install" 
+# Composer aliases
+alias compr="composer require"
+alias comprd="composer require-dev"
+alias compi="composer install"
+alias compu="composer update"
+# regenerate namespaces
+alias compda="composer dump-autoload"
 
 # Npm aliases
 alias yw="yarn watch"
 alias yd="yarn dev"
 alias yi="yarn add" 
-alias yt="yarn test" 
+alias yidev="yarn add --dev"
+alias yt="yarn test"
