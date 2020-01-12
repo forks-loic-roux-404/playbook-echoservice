@@ -17,7 +17,7 @@ mysql_url: "mysql://{{ mysql_user }}:{{ mysql_pw }}@{{ mysql_host }}/{{ mysql_db
 
 # mailer
 mail_user: andregope999@gmail.com
-mail_pw: ecoserviceMailer69
+mail_pw: ecoserviceDev69
 
 #logs
 log_dir: /data/logs

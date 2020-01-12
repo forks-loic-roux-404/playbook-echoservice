@@ -50,6 +50,11 @@
     - { path: .env.test }
     - { path: "{{ dir }}/.git" }
 
+- name: parameters
+  template:
+    src: parameters_dev.yaml
+    dest: "{{ web_dir }}/config/parameters.yaml"
+
 - name: Copy new virtual hosts file.
   template:
     src: default.conf

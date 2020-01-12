@@ -4,6 +4,7 @@
     name:
       - nfs-common
       - nfs-kernel-server
+      - bindfs
     state: present
 
 - name: Copy paramaters files.
@@ -16,8 +17,8 @@
   loop:
     - { src: exports.j2, dest: /etc/exports }
     #- { src: imapd.j2, dest: /etc/idmapd.conf }
-    #- { src: nfs-kernel-server.j2, dest: /etc/exports }
-    #- { src: nfs-commons.j2, dest: /etc/commons }
+    #- { src: nfs-kernel-server.j2, dest: /etc/default/nfs-kernel-server }
+    #- { src: nfs-commons.j2, dest: /etc/default/nfs-commons }
   notify: reload nfs
 
 - name: Ensure nfs is running.
