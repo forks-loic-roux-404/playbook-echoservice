@@ -11,9 +11,14 @@
 #   debug: 
 #     msg: "{{ stat_project }}"
 
+#- name: Ensure work folder isn't mounted
+#  mount:
+#    path: "{{ web_dir }}"
+#    state: unmounted
+
 - name: Init work folder
   stat:
-    path: "/data"
+    path: "{{ data_dir }}"
   register: stat_project_data
 
 - name: Prepare fresh directory
@@ -22,6 +27,15 @@
     path: "{{ dir }}"
     state: absent
   when: stat_project.stat.exists == true
+
+- name: Correct permissions
+  file:
+    dest: "{{ data_dir }}"
+    owner: "{{ web_owner }}"
+    group: "{{ web_group }}"
+    state: directory
+    mode: "{{ web_chmod }}"
+    recurse: yes
 
 - name: Clone the code repository to the docroot.
   git:
@@ -54,6 +68,10 @@
   template:
     src: parameters_dev.yaml
     dest: "{{ web_dir }}/config/parameters.yaml"
+
+- name: Dump schema
+  command: "{{ sf_console }} doctrine:schema:update --no-interaction"
+  ignore_errors: yes
 
 - name: Copy new virtual hosts file.
   template:

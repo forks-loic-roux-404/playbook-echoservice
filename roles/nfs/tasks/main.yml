@@ -7,19 +7,17 @@
       - bindfs
     state: present
 
-- name: Copy paramaters files.
-  template:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    owner: root
-    group: root
-    mode: 0644
-  loop:
-    - { src: exports.j2, dest: /etc/exports }
-    #- { src: imapd.j2, dest: /etc/idmapd.conf }
-    #- { src: nfs-kernel-server.j2, dest: /etc/default/nfs-kernel-server }
-    #- { src: nfs-commons.j2, dest: /etc/default/nfs-commons }
-  notify: reload nfs
+#- name: Copy paramaters files.
+  #lineinfile:
+    #path: /etc/fstab
+    #line: "{{ web_dir }} {{ web_dir }} bind bind"
+    #create: yes
+  #notify: reload nfs
+
+#- name: fix nfs on mac os
+#  shell: |
+#    "sudo bindfs --map=501/{{ web_owner }}:@dialout/@{{ web_group }} {{ web_dir }} {{ web_dir }}"
+#  notify: reload nfs
 
 - name: Ensure nfs is running.
   service: 

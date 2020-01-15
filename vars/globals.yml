@@ -1,4 +1,10 @@
+web_owner: "{% if app_env == 'dev' %}vagrant{% else %}apache{% endif %}"
+web_group: "{% if app_env == 'dev' %}vagrant{% else %}apache{% endif %}"
+
+web_chmod: u=rwX,g=rX,o=rX
+
 host: "{{ servername }}"
+data_dir: "/data/"
 dir: "/data/{{ projectname }}"
 web_dir: "{{ dir }}/{{ web_path }}"
 

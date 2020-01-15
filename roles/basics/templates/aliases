@@ -52,8 +52,8 @@ alias www='cd /data/{{ projectname }}/www'
 
 # Symfony aliases
 alias sf="php bin/console "
-alias sfcache="sf cache:clear"
-alias dschema="sf doctrine:schema:update -f"
+alias sfcache="php bin/console cache:clear"
+alias doctrine="php bin/console doctrine"
 
 # Composer aliases
 alias compr="composer require"
@@ -66,6 +66,6 @@ alias compda="composer dump-autoload"
 # Npm aliases
 alias yw="yarn watch"
 alias yd="yarn dev"
-alias yi="yarn add" 
-alias yidev="yarn add --dev"
+alias ya="yarn add"
+alias yadev="yarn add --dev"
 alias yt="yarn test"

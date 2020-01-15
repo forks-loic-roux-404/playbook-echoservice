@@ -1,8 +1,10 @@
 symfony_url: https://symfony.com/installer
-src_repo: https://github.com/g4-dev/src-{{ projectname }}.git
+src_repo: "https://github.com/g4-dev/src-{{ projectname }}.git"
 
 # env
-MAILER_DSN: gmail+smtp://{{ mail_user }}:{{ mail_pw }}@gmail
+MAILER_DSN: "gmail+smtp://{{ mail_user }}:{{ mail_pw }}@gmail"
+
+sf_console: "{{ web_dir }}/bin/console"
 
 # dist
 # gmail+smtp://andregope999@gmail.com:ecoserviceMailer69@gmail
