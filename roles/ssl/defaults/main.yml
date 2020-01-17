@@ -1,4 +1,10 @@
 ---
+
+# ssl (used in nginx conf)
+ssl_nginx_conf_path: "/etc/nginx/ssl"
+ssl_nginx_main_conf : "{{ ssl_nginx_conf_path }}/ssl_main.conf"
+ssl_nginx_server_conf : "{{ ssl_nginx_conf_path }}/ssl_{{ projectname }}.conf"
+
 ssl_certs_country: "FR"
 ssl_certs_locality: "Paris"
 ssl_certs_organization: "g4-dev"

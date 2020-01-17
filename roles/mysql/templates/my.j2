@@ -1,14 +1,19 @@
 # {{ ansible_managed }}
+[client]
+default-character-set = {{ default_character_set }}
+port            = {{ mysql_port }}
+socket          = /var/run/mysqld/mysqld.sock
+
 [mysqld_safe]
 socket		= /var/run/mysqld/mysqld.sock
 nice		= 0
 
 [mysqldump]
 user        = {{ mysql_user }}
-password    = "{{ mysql_pw}}"
-host        =  "{{ mysql_host }}"
-quick
-quote-names
+password    = {{ mysql_pw}}
+host        = {{ mysql_host }}
+#quick
+#quote-names
 max_allowed_packet	= {{ mysql_max_allowed_packet }}
 
 [isamchk]
@@ -25,7 +30,7 @@ skip-log-bin
 default_storage_engine	= InnoDB
 
 socket=/var/lib/mysql/mysql.sock
-bind-address = {{ mysql_bind_address }}
+#bind-address = {{ mysql_bind_address }}
 
 {% if mysql_datadir is defined and mysql_datadir != '/var/lib/mysql' %}
 datadir		= {{ mysql_datadir }}
@@ -76,4 +81,14 @@ expire_logs_days	= {{ mysql_expire_logs_days }}
 transaction-isolation = {{ mysql_transaction_isolation }}
 binlog_format = {{ mysql_binlog_format }}
 {% endif %}
+
+{% if default_authentication_plugin is defined %}
+default_authentication_plugin = {{ default_authentication_plugin }}
+sql_mode=''
+{% endif %}
+
+query_cache_limit = {{ query_cache_limit }}
+query_cache_size = {{ query_cache_size   }}
+
+!includedir /etc/mysql/mariadb.conf.d/
 

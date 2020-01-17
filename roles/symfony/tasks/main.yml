@@ -7,19 +7,20 @@
     path: "{{ dir }}"
   register: stat_project
 
-# - name: Stat project
-#   debug: 
+#- name: Stat project
+#  debug:
 #     msg: "{{ stat_project }}"
-
-#- name: Ensure work folder isn't mounted
-#  mount:
-#    path: "{{ web_dir }}"
-#    state: unmounted
 
 - name: Init work folder
   stat:
     path: "{{ data_dir }}"
   register: stat_project_data
+
+- name: unmount directory
+  mount:
+    path: "{{ web_dir }}"
+    state: unmounted
+  when: stat_project.stat.exists == true and nfs == true
 
 - name: Prepare fresh directory
   become: yes
@@ -41,14 +42,20 @@
   git:
     repo: "{{ src_repo }}"
     dest: "{{ dir }}"
+    version: "{{ src_branch }}"
   become_user: vagrant
+
+- name: parameters
+  template:
+    src: parameters_dev.yaml
+    dest: "{{ web_dir }}/config/parameters.yaml"
 
 # Symfony 5
 - name: Init symfony5 project
   composer:
     command: install
     working_dir: "{{ web_dir }}"
-    prefer_dist: yes
+    no_dev: "{%if app_env != 'dev'%}yes{%else%}no{%endif%}"
   environment:
     APP_ENV: "{{ app_env }}"
   become_user: vagrant
@@ -64,14 +71,14 @@
     - { path: .env.test }
     - { path: "{{ dir }}/.git" }
 
-- name: parameters
-  template:
-    src: parameters_dev.yaml
-    dest: "{{ web_dir }}/config/parameters.yaml"
+- name: Symbolic link phpunit
+  become_user: "{{ web_owner }}"
+  shell: "ln -sf $(which phpunit) {{ web_dir }}/bin/phpunit"
+  ignore_errors: yes
 
 - name: Dump schema
-  command: "{{ sf_console }} doctrine:schema:update --no-interaction"
-  ignore_errors: yes
+  command: "{{ sf_console }} doctrine:schema:update -f --no-interaction"
+  ignore_errors: "{%if app_env == 'dev' %}yes{%else%}no{%endif%}"
 
 - name: Copy new virtual hosts file.
   template:

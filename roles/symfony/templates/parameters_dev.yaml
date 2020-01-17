@@ -5,33 +5,4 @@ parameters:
     env(LOCAL_DATABASE_URL): {{ mysql_url }}
     env(REMOTE_DATABASE_URL): {{ backup_url }}
 
-#doctrine:
-#    dbal:
-#        connections:
-#            default:
-#                # local database server
-#                host:                  {{ mysql_host }}
-#                port:                  {{ mysql_port }}
-#                user:                  {{ mysql_user }}
-#                password:              {{ mysql_pw }}
-#                dbname:                {{ mysql_db }}
-#
-#                url: {{ mysql_url }}
-#                server_version: 'mariadb-10.4.11'
-#            customer:
-#                # remote
-#                host:                  {{ backup_host }}
-#                port:                  {{ mysql_port }}
-#                user:                  {{ backup_user }}
-#                password:              {{ backup_pw }}
-#                dbname:                {{ mysql_db }}
-#                url: {{ backup_url }}
-#                server_version: '5.7'
-#
-#framework:
-#    mailer:
-#        dsn: {{ MAILER_DSN }}
-
-
-
 

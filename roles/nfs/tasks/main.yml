@@ -7,18 +7,6 @@
       - bindfs
     state: present
 
-#- name: Copy paramaters files.
-  #lineinfile:
-    #path: /etc/fstab
-    #line: "{{ web_dir }} {{ web_dir }} bind bind"
-    #create: yes
-  #notify: reload nfs
-
-#- name: fix nfs on mac os
-#  shell: |
-#    "sudo bindfs --map=501/{{ web_owner }}:@dialout/@{{ web_group }} {{ web_dir }} {{ web_dir }}"
-#  notify: reload nfs
-
 - name: Ensure nfs is running.
   service: 
     name: "{{ nfs_server_daemon }}"

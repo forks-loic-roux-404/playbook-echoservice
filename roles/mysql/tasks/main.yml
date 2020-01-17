@@ -51,6 +51,22 @@
     enabled: yes
   become: yes
 
+- name: my.cnf configuration
+  template:
+    src: my.j2
+    dest: "{{ mysql_config_file }}"
+    owner: root
+    group: root
+    mode: 0400
+    force: true
+  notify: restart mysql
+
+- name: remove old configs
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop: "{{ to_remove_conf }}"
+
 - name: Get list of hosts for the anonymous user.
   command: mysql -NBe 'SELECT Host FROM mysql.user WHERE User = ""'
   register: mysql_anonymous_hosts
@@ -70,23 +86,13 @@
     name: test
     state: absent
 
-- name: my.cnf configuration
-  template: 
-    src: my.j2
-    dest: "{{ mysql_config_file }}" 
-    owner: root
-    group: root
-    mode: 0400
-    force: true
-  notify: restart mysql
-
 - name: Root User Creation
   mysql_user: 
     login_unix_socket: /var/run/mysqld/mysqld.sock
     name: "{{ mysql_root_user }}"
-    host: "%"
+    host: "{%if app_env == 'dev'%}%{%else%}{{ mysql_host }}{%endif%}"
     password: "{{ mysql_root_password }}"
-    priv: "*.*:ALL"
+    priv: "*.*:ALL,GRANT"
     append_privs: true
     state: present
   when: mysql_root_password is defined
@@ -96,9 +102,10 @@
   mysql_user: 
     login_unix_socket: /var/run/mysqld/mysqld.sock
     name: "{{ mysql_user }}"
-    host: "{{ mysql_host }}"
+    config_file: "{{ mysql_confdir }}"
+    host: "{%if app_env == 'prod' %}{{ mysql_host }}{% else %}%{% endif %}"
     password: "{{ mysql_pw }}"
-    priv: "*.*:ALL"
+    priv: "*.*:ALL,GRANT"
     append_privs: true
     state: present
 

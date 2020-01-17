@@ -14,7 +14,6 @@
     - { role: symfony, when: projectname != 0 }
     - { role: nfs, when: nfs == true }
     - { role: clean }
-    
    post_tasks:
     - service: 
         name: nginx

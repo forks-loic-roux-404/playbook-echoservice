@@ -1,17 +1,12 @@
 web_owner: "{% if app_env == 'dev' %}vagrant{% else %}apache{% endif %}"
 web_group: "{% if app_env == 'dev' %}vagrant{% else %}apache{% endif %}"
 
-web_chmod: u=rwX,g=rX,o=rX
+web_chmod: u=rwx,g=rx,o=rx
 
 host: "{{ servername }}"
 data_dir: "/data/"
 dir: "/data/{{ projectname }}"
 web_dir: "{{ dir }}/{{ web_path }}"
-
-# ssl (used in nginx conf)
-ssl_nginx_conf_path: "/etc/nginx/ssl"
-ssl_nginx_main_conf : "{{ ssl_nginx_conf_path }}/ssl_main.conf"
-ssl_nginx_server_conf : "{{ ssl_nginx_conf_path }}/ssl_{{ projectname }}.conf"
 
 # mysql globals
 mysql_user: ecs_user

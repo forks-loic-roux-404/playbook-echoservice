@@ -1,0 +1,9 @@
+# Apple env files
+*.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows shortcuts
+*.lnk
+.idea/*
+.vscode/*

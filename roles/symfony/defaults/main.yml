@@ -1,6 +1,6 @@
 symfony_url: https://symfony.com/installer
 src_repo: "https://github.com/g4-dev/src-{{ projectname }}.git"
-
+src_branch: "{% if app_env == 'dev' %}develop{%else%}master{%endif%}"
 # env
 MAILER_DSN: "gmail+smtp://{{ mail_user }}:{{ mail_pw }}@gmail"
 
