@@ -61,6 +61,7 @@
   become_user: vagrant
   register: new_symfony_project
   ignore_errors: yes
+  when: stat_project.stat.exists != true || update == 'true'
 
 - name: clean
   file:
