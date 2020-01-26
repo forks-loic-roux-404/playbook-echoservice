@@ -61,7 +61,7 @@
   become_user: vagrant
   register: new_symfony_project
   ignore_errors: yes
-  when: stat_project.stat.exists != true || update == 'true'
+  when: stat_project.stat.exists != true or update == true
 
 - name: clean
   file:
@@ -93,3 +93,7 @@
     state: link
   notify:
    - restart nginx
+
+- name: Include cron config for project
+  include_tasks: cron.yml
+  when: app_env != 'prod'

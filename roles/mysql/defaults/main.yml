@@ -29,15 +29,12 @@ mysql_root_password: root
 mysql_config_file: /etc/my.cnf
 mysql_bind_address: false  # false for opening mysql in local client
 
-# for cron backup
+# remote db config
 backup_host: remotemysql.com
 backup_user: EmwnLitSLR
 backup_pw: Gk0qCm6hFI
 backup_db: EmwnLitSLR
 backup_url: "mysql://{{ backup_user }}:{{ backup_pw }}@{{ backup_host }}/{{ backup_db }}"
-
-cron_workspace: /data/.cr_wk
-cron_sql_log: "{{ log_dir }}/cron"
 
 # fix common dev error
 default_authentication_plugin: mysql_native_password

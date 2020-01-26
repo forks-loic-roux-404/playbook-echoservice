@@ -6,5 +6,6 @@ MAILER_DSN: "gmail+smtp://{{ mail_user }}:{{ mail_pw }}@gmail"
 
 sf_console: "{{ web_dir }}/bin/console"
 
-# dist
-# gmail+smtp://andregope999@gmail.com:ecoserviceMailer69@gmail
+# Cron
+cron_workspace: /data/.cr_wk
+cron_sql_log: "{{ log_dir }}/cron"

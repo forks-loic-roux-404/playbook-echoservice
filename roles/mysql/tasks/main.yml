@@ -116,37 +116,3 @@
     collation: utf8_general_ci
     encoding: utf8
     state: present
-
-- name: Cron dumping db
-  block:
-  - name: log file
-    file:
-      path: "{{ cron_sql_log }}"
-      state: directory
-
-  - name: folder
-    file:
-      path: "{{ cron_workspace }}"
-      state: directory
-      owner: root
-      mode: 755
-
-  - name: dump script
-    template:
-      src: cron.sh
-      dest: "{{ cron_workspace }}/cron.sh"
-      owner: root
-      group: crontab
-      mode: 0550
-
-  - name: Dump database
-    become: yes
-    cron:
-      name: "dump database"
-      minute: "0"
-      hour: "6"
-      job: "{{ cron_workspace }}/cron.sh > {{ cron_sql_log }}"  
-
-  - name: import remote db
-    shell: "/bin/bash {{ cron_workspace }}/cron.sh"
-    register: db_exist

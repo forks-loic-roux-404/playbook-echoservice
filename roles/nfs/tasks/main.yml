@@ -4,7 +4,6 @@
     name:
       - nfs-common
       - nfs-kernel-server
-      - bindfs
     state: present
 
 - name: Ensure nfs is running.
