@@ -48,12 +48,12 @@ alias ldir="ls -l | egrep '^d'" # directories only
 alias h="history | grep "
 
 # Alias's to change the directory
-alias www='cd /data/{{ projectname }}/www'
+alias www='cd {{ web_dir }}'
 
 # Symfony aliases
-alias sf="php bin/console "
-alias sfcache="php bin/console cache:clear"
-alias doctrine="php bin/console doctrine"
+alias sf="php {{ web_dir }}/bin/console"
+alias sfcache="sf cache:clear"
+alias doctrine="sf doctrine"
 
 # Composer aliases
 alias compr="composer require"
@@ -64,8 +64,7 @@ alias compu="composer update"
 alias compda="composer dump-autoload"
 
 # Npm aliases
+alias yn="yarn"
 alias yw="yarn watch"
-alias yd="yarn dev"
-alias ya="yarn add"
-alias yadev="yarn add --dev"
 alias yt="yarn test"
+alias yl="yarn lint"
