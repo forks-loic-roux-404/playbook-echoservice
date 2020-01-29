@@ -9,3 +9,10 @@ nginx_access_log: "{{ log_project_dir }}/access.log"
 nginx_error_log: "{{ log_project_dir }}/server_error.log"
 nginx_project_log: "{{ log_project_dir }}/app_{{ projectname }}.log"
 nginx_project_error_log: "{{ log_project_dir }}/app_{{ projectname }}.log"
+
+# folders
+nginx_conf_dir: "/etc/nginx/conf.d"
+
+# cache
+cache_basics_conf_name: "basics"
+cache_basics_conf: "{{ nginx_conf_dir }}/{{ cache_basics_conf_name }}"

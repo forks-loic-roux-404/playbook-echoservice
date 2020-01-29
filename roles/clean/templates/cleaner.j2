@@ -6,7 +6,7 @@
 sudo apt -y autoremove ansible
 sudo apt -y autoremove python
 
-rm {{ cron_sql_log }} || true
+rm {{ log_dir }}/*
 
 if [ -d /tmp/ansible ]; then
     sudo rm -rf /tmp/ansible

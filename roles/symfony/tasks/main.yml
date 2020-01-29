@@ -27,7 +27,7 @@
   file:
     path: "{{ dir }}"
     state: absent
-  when: stat_project.stat.exists == true
+  when: stat_project.stat.exists == false or composer_install == true
 
 - name: Correct permissions
   file:
@@ -43,7 +43,8 @@
     repo: "{{ src_repo }}"
     dest: "{{ dir }}"
     version: "{{ src_branch }}"
-  become_user: vagrant
+  become_user: "{{ web_owner }}"
+  when: stat_project.stat.exists == false or composer_install == true
 
 - name: parameters
   template:
@@ -54,6 +55,7 @@
   template:
     src: phpunit.xml
     dest: "{{ web_dir }}/phpunit.xml"
+    owner: "{{ web_owner }}"
 
 # Symfony 5
 - name: Init symfony5 project
@@ -66,7 +68,7 @@
   become_user: vagrant
   register: new_symfony_project
   ignore_errors: yes
-  when: stat_project.stat.exists != true or update == true
+  when: stat_project.stat.exists == false or composer_install == true
 
 - name: clean
   file:

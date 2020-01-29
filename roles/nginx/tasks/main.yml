@@ -14,11 +14,13 @@
     - deb-src
 
 - name: Install webserver
+  force: "{{ update_nginx }}"
   apt:
     name: nginx
     state: latest
 
 - name: Create folders
+  force: "{{ update_nginx }}"
   file:
     path: "{{ item.path }}"
     mode: "{{ item.mode }}"
@@ -28,23 +30,26 @@
   loop:
     - { path: "/etc/nginx/sites-available", mode: 755, user: root, group: root }
     - { path: "/etc/nginx/sites-enabled", mode: 755, user: root, group: root }
-    - { path: "/var/lib/nginx", mode: 777, user: vagrant, group: root }
-    - { path: "/var/lib/nginx/tmp", mode: 777, user: vagrant, group: root }
-    - { path: "/var/run/{{ projectname }}", mode: 755, user: vagrant, group: root }
-    - { path: "{{ nginx_log_dir }}", mode: 755, user: vagrant, group: vagrant }
+    - { path: "/var/lib/nginx", mode: 777, user: "{{ web_owner }}", group: root }
+    - { path: "/var/lib/nginx/tmp", mode: 777, user: "{{ web_owner }}", group: root }
+    - { path: "/var/run/{{ projectname }}", mode: 755, user: "{{ web_owner }}", group: root }
+    - { path: "{{ nginx_log_dir }}", mode: 755, user: "{{ web_owner }}", group: "{{ web_owner }}" }
 
 - name: Build all config files
+  force: "{{ update_nginx }}"
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
   loop:
+    # TODO: Make more variables to specify directories
     - { src: nginx.conf, dest: /etc/nginx/nginx.conf }
     - { src: proxy.conf, dest: "/etc/nginx/{{ projectname }}_proxy" }
-    - { src: gzip.conf, dest: /etc/nginx/conf.d/gzip }
-    - { src: brotli.conf, dest: /etc/nginx/conf.d/brotli }
-    # auto importing configs
-    - { src: settings.conf, dest: /etc/nginx/conf.d/settings.conf }
-    - { src: backends.conf, dest: /etc/nginx/conf.d/backends.conf }
+    - { src: gzip.conf, dest: "{{ nginx_conf_dir }}/gzip" }
+    - { src: brotli.conf, dest: "{{ nginx_conf_dir }}/brotli" }
+    - { src: basics.conf, dest: "{{ cache_basics_conf }}" }
+    # auto imported configs
+    - { src: settings.conf, dest: "{{ nginx_conf_dir }}/settings.conf" }
+    - { src: backends.conf, dest: "{{ nginx_conf_dir }}/backends.conf" }
 
 - name: Start Nginx and enable the service in autostart
   service:
