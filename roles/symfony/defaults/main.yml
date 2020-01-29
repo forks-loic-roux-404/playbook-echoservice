@@ -9,3 +9,6 @@ sf_console: "{{ web_dir }}/bin/console"
 # Cron
 cron_workspace: /data/.cr_wk
 cron_sql_log: "{{ log_dir }}/cron"
+
+# tests
+KERNEL_CLASS: Core/Kernel

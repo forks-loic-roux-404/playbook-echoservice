@@ -110,13 +110,6 @@
     state: started
     enabled: yes
 
-### Install PHPUnit
-- name: Install PHPUnit
-  get_url:
-    url: "{{ phpunit_url }}"
-    dest: "{{ phpunit_path }}"
-    mode: 0777
-
 ### Install Composer
 - name: Download Composer
   get_url:

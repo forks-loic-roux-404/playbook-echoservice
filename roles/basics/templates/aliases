@@ -53,7 +53,6 @@ alias www='cd {{ web_dir }}'
 # Symfony aliases
 alias sf="php {{ web_dir }}/bin/console"
 alias sfcache="sf cache:clear"
-alias doctrine="sf doctrine"
 
 # Composer aliases
 alias compr="composer require"

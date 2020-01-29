@@ -2,22 +2,25 @@
    vars_files:
     - vars/globals.yml
    roles:
-    - { role: basics }
-    - { role: updates }
-    - { role: ssl,  when: ssl == true }
-    - { role: nginx }
-    - { role: php }
-    - { role: mysql }
-    - { role: redis }
-    - { role: nodejs }
+    - { role: basics , when: update != false and 'basics' in update }
+    - { role: updates, when:  update != false and 'updates' in update }
+    - { role: ssl, when: ssl == true, update != false and 'ssl' in update }
+    - { role: nginx, when: update != false and 'nginx' in update }
+    - { role: php, when: update != false and 'nginx' in update  }
+    - { role: mysql, when: update != false and 'nginx' in update  }
+    - { role: redis, when: update != false and 'nginx' in update  }
+    - { role: nodejs, when: update != false and 'nginx' in update  }
     - { role: tests, when: testing_mode == 1 }
-    - { role: symfony, when: projectname != 0 }
-    - { role: nfs, when: nfs == true }
+    - { role: symfony, when: projectname != 0 and update != false and 'nginx' in update }
+    - { role: nfs, when: nfs == true and update != false and 'nginx' in update  }
     - { role: clean }
    post_tasks:
     - service: 
         name: nginx
         state: restarted
+        when: update != false and 'nginx' in update
+
     - service:
         name: "php{{ php_version }}-fpm"
         state: restarted
+        when: update != false and 'php' in update

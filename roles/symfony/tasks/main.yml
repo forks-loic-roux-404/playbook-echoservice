@@ -50,6 +50,11 @@
     src: parameters_dev.yaml
     dest: "{{ web_dir }}/config/parameters.yaml"
 
+- name: PhpUnit
+  template:
+    src: phpunit.xml
+    dest: "{{ web_dir }}/phpunit.xml"
+
 # Symfony 5
 - name: Init symfony5 project
   composer:
@@ -71,11 +76,6 @@
     - { path: .env }
     - { path: .env.test }
     - { path: "{{ dir }}/.git" }
-
-- name: Symbolic link phpunit
-  become_user: "{{ web_owner }}"
-  shell: "ln -sf $(which phpunit) {{ web_dir }}/bin/phpunit"
-  ignore_errors: yes
 
 - name: Dump schema
   command: "{{ sf_console }} doctrine:schema:update -f --no-interaction"
