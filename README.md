@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/g4-dev/playbook-ecs.svg?branch=master)](https://travis-ci.org/g4-dev/playbook-ecs)
+
 # Playbook ecoservice
 
 Liste de roles à mettre en place sur une VM virtualbox
