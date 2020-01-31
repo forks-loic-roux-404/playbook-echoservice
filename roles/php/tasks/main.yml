@@ -30,6 +30,12 @@
     state: present
     update_cache: yes
 
+- name: Install PHP
+  apt:
+    state: present
+    pkg: php{{ php_version }}
+    update_cache: yes
+
 - name: Install PHP Packages
   apt:
     state: present
