@@ -34,43 +34,16 @@
   apt:
     state: present
     pkg:
-    - php{{ php_version }}
-    - php{{ php_version }}-fpm
-    - php{{ php_version }}-mysql
-    - php{{ php_version }}-sqlite3
-    - php{{ php_version }}-cli
-    - php{{ php_version }}-curl
-    - php{{ php_version }}-gd
-    - php{{ php_version }}-intl
-    - php{{ php_version }}-json
-    - php{{ php_version }}-mbstring
-    - php{{ php_version }}-opcache
-    - php{{ php_version }}-readline
-    - php{{ php_version }}-xml
-    - php{{ php_version }}-xsl
-    - php{{ php_version }}-zip
-    - php{{ php_version }}-bz2
-    - php{{ php_version }}-redis
-    - php{{ php_version }}-gmp
-    - php{{ php_version }}-igbinary
-    - php{{ php_version }}-bcmath
-    - php{{ php_version }}-imagick
-    - php{{ php_version }}-memcached
-    #- php{{ php_version }}-mongodb
-    - php{{ php_version }}-msgpack
-    - php{{ php_version }}-pspell
-    - php{{ php_version }}-ssh2
-    - php{{ php_version }}-xmlrpc
-    - php{{ php_version }}-common
-    - php{{ php_version }}-xdebug
-    - php{{ php_version }}-apcu
-
+    - "php{{ php_version }}-{{item}}"
+  loop: "{{ php_modules }}"
   notify:
    - restart php-fpm
    - restart nginx
+  when: update_php == true
 
 - name: Copy PHP-FPM config
   template:
+    force: "{{ update_php }}"
     src: www.conf
     dest: /etc/php/{{ php_version }}/fpm/pool.d/www.conf
 
@@ -110,13 +83,6 @@
     state: started
     enabled: yes
 
-### Install PHPUnit
-- name: Install PHPUnit
-  get_url:
-    url: "{{ phpunit_url }}"
-    dest: "{{ phpunit_path }}"
-    mode: 0777
-
 ### Install Composer
 - name: Download Composer
   get_url:
@@ -131,7 +97,8 @@
   shell: mv -f {{ composer_path }}/composer.phar {{ composer_path }}/composer
 
 - name: php.ini configuration
-  template: 
+  template:
+    force: "{{ update_php }}"
     src: "php.ini.j2"
     dest: "{{ php_config_file }}" 
     owner: root

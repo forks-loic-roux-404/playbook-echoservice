@@ -6,6 +6,10 @@ MAILER_DSN: "gmail+smtp://{{ mail_user }}:{{ mail_pw }}@gmail"
 
 sf_console: "{{ web_dir }}/bin/console"
 
-# Cron
-cron_workspace: /data/.cr_wk
-cron_sql_log: "{{ log_dir }}/cron"
+# tests
+KERNEL_CLASS: Core/Kernel
+
+# cron
+cron_log_dir: "{{ log_dir }}/crons"
+db_update: "make -C {{ dir }} db_update_local"
+db_update_cron_log_file: "{{ cron_log_dir }}/db_update.log"

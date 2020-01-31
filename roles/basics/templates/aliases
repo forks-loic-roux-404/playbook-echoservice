@@ -53,13 +53,12 @@ alias www='cd {{ web_dir }}'
 # Symfony aliases
 alias sf="php {{ web_dir }}/bin/console"
 alias sfcache="sf cache:clear"
-alias doctrine="sf doctrine"
+alias sff="rm -rf {{ web_dir }}/var/cache/*"
 
 # Composer aliases
 alias compr="composer require"
 alias comprd="composer require-dev"
 alias compi="composer install"
-alias compu="composer update"
 # regenerate namespaces
 alias compda="composer dump-autoload"
 
@@ -68,3 +67,6 @@ alias yn="yarn"
 alias yw="yarn watch"
 alias yt="yarn test"
 alias yl="yarn lint"
+
+# db aliases
+alias db_update_local="make -C {{ dir }} db_update_local"

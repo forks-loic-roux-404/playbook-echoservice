@@ -35,6 +35,12 @@
     state: absent
   loop: "{{ prune_php_versions }}"
 
+- name: remove old php folder
+  file:
+    path: "/etc/php/php{{ item }}"
+    state: absent
+  loop: "{{ prune_php_versions }}"
+
 - name: Update and upgrade apt packages
   become: yes
   apt:

@@ -1,8 +1,39 @@
 php_version: 7.4
 php_repo_key: https://packages.sury.org/php/apt.gpg
 php_repo: https://packages.sury.org/php/
-phpunit_url: https://phar.phpunit.de/phpunit.phar
-phpunit_path: /usr/local/bin/phpunit
 composer_url: https://getcomposer.org/installer
 composer_tmp: /tmp/composer_installer
 composer_path: /usr/local/bin/
+
+# Add php extenxions
+# php-version-(module) | ex : php7.3-fpm
+php_modules:
+    - fpm
+    - mysql
+  # - sqlite3
+    - cli
+    - curl
+    - gd
+    - intl
+    - json
+    - mbstring
+    - opcache
+    - readline
+    - xml
+    - xsl
+    - zip
+    - bz2
+    - redis
+    - gmp
+    - igbinary
+    - bcmath
+    - imagick
+    - memcached
+  # - mongodb
+    - msgpack
+    - pspell
+    - ssh2
+    - xmlrpc
+    - common
+    - xdebug
+    - apcu

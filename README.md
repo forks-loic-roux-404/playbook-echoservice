@@ -6,11 +6,10 @@ Liste de roles à mettre en place sur une VM virtualbox
 ---
 ### Les rôles :
 - php (configurable de 7.0 à 7.4)
-- composer (Last version)
-- phpunit (global)
+- composer (1.9.1)
 - nodejs (LTS)
 - nginx mainline (1.17 - not far to be stable)
-- mysql 8 - `TODO:` fix password issue
+- mariadb
 - redis-server - `TODO:` not fully configured  
 
 ### Pour modifier le play book

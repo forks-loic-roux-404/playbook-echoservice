@@ -50,10 +50,6 @@
   debug: 
     msg: "{{ test_result.stdout }}"
 
-- name: Check PHPUnit
-  shell: 'phpunit --version'
-  register: test_result
-
 - name: Display result
   debug:
     msg: "{{ test_result.stdout }}"

@@ -2,29 +2,14 @@
   block:
   - name: log file
     file:
-        path: "{{ cron_sql_log }}"
+        path: "{{ cron_log_dir }}"
         state: directory
-
-  - name: folder
-    file:
-        path: "{{ cron_workspace }}"
-        state: directory
-        owner: root
-        mode: 755
-
-  - name: dump script
-    template:
-        src: cron.sh
-        dest: "{{ cron_workspace }}/cron.sh"
 
   - name: Dump database
     become: yes
     cron:
         name: "dump database"
+        user: "{{ web_owner }}"
         minute: "0"
         hour: "2"
-        job: "{{ cron_workspace }}/cron.sh > {{ cron_sql_log }}"
-
-  - name: import remote db
-    shell: "/bin/bash {{ cron_workspace }}/cron.sh"
-    when: update == true
+        job: "{{ db_update }} >> {{ db_update_cron_log_file }}"
