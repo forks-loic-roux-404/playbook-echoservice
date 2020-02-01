@@ -4,13 +4,10 @@
     pkg:
       - gnupg2
       - vim
-      - git
       - curl
       - wget
       - zip
       - unzip
-      - htop
-      - iotop
       - postfix
       - apt-transport-https
       - ca-certificates
@@ -40,7 +37,14 @@
   with_items:
     - { path: '/etc/ssh/sshd_config', regexp: '^#PrintLastLog yes', line: PrintLastLog no }
     - { path: '/etc/ssh/sshd_config', regexp: '^#PermitRootLogin prohibit-password', line: "PermitRootLogin {{ permit_root_login }}" }
-    #- { path: '/proc/sys/vm/overcommit_memory', '^0', line: "vm.overcommit_memory={{ over_commit_memory }}" }
+  #ignore_errors: yes
+
+- name: Others configs
+  lineinfile:
+    path: "{{ item.path }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { path: '/etc/sysctl.conf', line: "vm.overcommit_memory={{ over_commit_memory }}" }
   #ignore_errors: yes
 
 - name: Set new welcome message  

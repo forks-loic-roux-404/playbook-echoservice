@@ -25,7 +25,6 @@
     owner: "{{ item.user }}"
     group: "{{ item.group }}"
     state: directory
-    force: "{{ update_nginx }}"
   loop:
     - { path: "/etc/nginx/sites-available", mode: 755, user: root, group: root }
     - { path: "/etc/nginx/sites-enabled", mode: 755, user: root, group: root }
@@ -38,7 +37,6 @@
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
-    force: "{{ update_nginx }}"
   loop:
     # TODO: Make more variables to specify directories
     - { src: nginx.conf, dest: /etc/nginx/nginx.conf }

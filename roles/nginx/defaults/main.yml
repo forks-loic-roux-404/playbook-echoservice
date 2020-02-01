@@ -16,3 +16,6 @@ nginx_conf_dir: "/etc/nginx/conf.d"
 # cache
 cache_basics_conf_name: "basics"
 cache_basics_conf: "{{ nginx_conf_dir }}/{{ cache_basics_conf_name }}"
+
+# securtity & perf
+worker_file_limit: 8092

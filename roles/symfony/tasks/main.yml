@@ -16,7 +16,7 @@
     path: "{{ data_dir }}"
   register: stat_project_data
 
-- name: unmount directory
+- name: Unmount directory
   mount:
     path: "{{ web_dir }}"
     state: unmounted
@@ -27,7 +27,7 @@
   file:
     path: "{{ dir }}"
     state: absent
-  when: stat_project.stat.exists == false or composer_install == true
+  when: stat_project.stat.exists == false
 
 - name: Correct permissions
   file:
@@ -44,7 +44,7 @@
     dest: "{{ dir }}"
     version: "{{ src_branch }}"
   become_user: "{{ web_owner }}"
-  when: stat_project.stat.exists == false or composer_install == true
+  when: stat_project.stat.exists == false
 
 - name: parameters
   template:
@@ -68,7 +68,7 @@
   become_user: vagrant
   register: new_symfony_project
   ignore_errors: yes
-  when: stat_project.stat.exists == false or composer_install == true
+  when: stat_project.stat.exists == false
 
 - name: clean
   file:

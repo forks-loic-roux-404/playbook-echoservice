@@ -1,4 +1,6 @@
-php_config_file: "/etc/php/{{ php_version }}/fpm/php.ini"
+php_config_dir: "/etc/php/{{ php_version }}/fpm"
+php_config_file: "{{ php_config_dir }}/php.ini"
+fpm_config_file: "{{ php_config_dir }}/php-fpm.conf"
 
 # [PHP]
 upload_max_filesize: 20M

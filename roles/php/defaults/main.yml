@@ -5,9 +5,11 @@ composer_url: https://getcomposer.org/installer
 composer_tmp: /tmp/composer_installer
 composer_path: /usr/local/bin/
 
+fpm_service: "php{{ php_version}}-fpm"
 # Add php extenxions
 # php-version-(module) | ex : php7.3-fpm
 php_modules:
+    - php
     - fpm
     - mysql
   # - sqlite3
@@ -24,7 +26,7 @@ php_modules:
     - zip
     - bz2
     - redis
-    - gmp
+    #- gmp
     - igbinary
     - bcmath
     - imagick
@@ -32,8 +34,12 @@ php_modules:
   # - mongodb
     - msgpack
     - pspell
-    - ssh2
+    #- ssh2
     - xmlrpc
-    - common
+    #- common
     - xdebug
     - apcu
+
+# php.ini commons
+date:
+    timezone: "Europe/Paris"
