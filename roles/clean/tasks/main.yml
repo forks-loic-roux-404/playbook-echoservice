@@ -39,6 +39,7 @@
   file:
     path: "/etc/php/php{{ item }}"
     state: absent
+    force: yes
   loop: "{{ prune_php_versions }}"
 
 - name: Update and upgrade apt packages

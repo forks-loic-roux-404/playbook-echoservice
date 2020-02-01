@@ -13,3 +13,6 @@ KERNEL_CLASS: Core/Kernel
 cron_log_dir: "{{ log_dir }}/crons"
 db_update: "make -C {{ dir }} db_update_local"
 db_update_cron_log_file: "{{ cron_log_dir }}/db_update.log"
+
+# assets
+yarn_build_command: prod

@@ -24,3 +24,5 @@ mail_pw: ecoserviceDev69
 log_dir: /data/logs
 log_project_dir: "{{ log_dir }}/{{ projectname }}"
 log_project_file: "{{ log_project_dir }}/app_{{ projectname }}.log"
+
+skip_redis: true

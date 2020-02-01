@@ -80,7 +80,13 @@
     - { path: "{{ dir }}/.git" }
 
 - name: Dump schema
-  command: "{{ sf_console }} doctrine:schema:update -f --no-interaction"
+  command: "{{ sf_console }} doctrine:schema:update --force --no-interaction"
+  become_user: "{{ web_owner }}"
+  ignore_errors: "{%if app_env == 'dev' %}yes{%else%}no{%endif%}"
+
+- name: Build assets
+  command: "yarn --cwd {{ web_dir }} {%if app_env == 'dev' %}dev{%else%}{{ yarn_build_command }}{%endif%}"
+  become_user: "{{ web_owner }}"
   ignore_errors: "{%if app_env == 'dev' %}yes{%else%}no{%endif%}"
 
 - name: Copy new virtual hosts file.

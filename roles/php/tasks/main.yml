@@ -46,14 +46,14 @@
     mode: 0644
   notify: restart php-fpm
 
-- name: fpm configuration
-  template:
-    src: "fpm.conf"
-    dest: "{{ fpm_config_file }}"
-    owner: root
-    group: root
-    mode: 0644
-  notify: restart php-fpm
+#- name: fpm configuration
+  #template:
+    #src: "fpm.conf"
+    #dest: "{{ fpm_config_file }}"
+    #owner: root
+    #group: root
+    #mode: 0644
+  #notify: restart php-fpm
 
 - name: Copy PHP-FPM config
   template:
