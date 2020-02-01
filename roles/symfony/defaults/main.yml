@@ -10,9 +10,11 @@ sf_console: "{{ web_dir }}/bin/console"
 KERNEL_CLASS: Core/Kernel
 
 # cron
-cron_log_dir: "{{ log_dir }}/crons"
+cron_workspace: "{{ dir }}/.crons"
+cron_log_dir: "{{ cron_workspace}}/logs"
 db_update: "make -C {{ dir }} db_update_local"
 db_update_cron_log_file: "{{ cron_log_dir }}/db_update.log"
+cron_clear_migration: "{{ cron_workspace }}/clear_migrations.sh"
 
-# assets
+    # assets
 yarn_build_command: prod

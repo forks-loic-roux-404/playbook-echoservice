@@ -13,7 +13,7 @@
 
 - name: Init work folder
   stat:
-    path: "{{ data_dir }}"
+    path: "{{ web_dir }}"
   register: stat_project_data
 
 - name: Unmount directory
@@ -27,7 +27,7 @@
   file:
     path: "{{ dir }}"
     state: absent
-  when: stat_project.stat.exists == false
+  when: stat_project.stat.exists == false or app_env == 'dev'
 
 - name: Correct permissions
   file:
@@ -44,7 +44,7 @@
     dest: "{{ dir }}"
     version: "{{ src_branch }}"
   become_user: "{{ web_owner }}"
-  when: stat_project.stat.exists == false
+  when: stat_project.stat.exists == false or app_env == 'dev'
 
 - name: parameters
   template:
@@ -68,7 +68,7 @@
   become_user: vagrant
   register: new_symfony_project
   ignore_errors: yes
-  when: stat_project.stat.exists == false
+  when: stat_project.stat.exists == false or app_env == 'dev'
 
 - name: clean
   file:
