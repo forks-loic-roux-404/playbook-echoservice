@@ -1,9 +1,14 @@
-- name: Cron dumping db
+- name: Crons around db
   block:
   - name: log file
     file:
-        path: "{{ cron_log_dir }}"
+        path: "{{ cron_workspace }}"
         state: directory
+
+  - name: scripts
+    template:
+        src: "clear_migrations.sh"
+        dest: "{{ cron_clear_migration }}"
 
   - name: Dump database
     become: yes
@@ -11,5 +16,21 @@
         name: "dump database"
         user: "{{ web_owner }}"
         minute: "0"
-        hour: "2"
-        job: "{{ db_update }} >> {{ db_update_cron_log_file }}"
+        hour: "02"
+        day: "*"
+        month: "*"
+        weekday: "*"
+        job: "{{ db_update }}"
+
+  - name: Clear migrations
+    become: yes
+    cron:
+        name: "dump database"
+        user: "{{ web_owner }}"
+        minute: "0"
+        hour: "4"
+        day: "*"
+        month: "*"
+        weekday: "*"
+        job: "{{ cron_clear_migration }}"
+
