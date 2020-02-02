@@ -11,7 +11,7 @@
     name: "{{ nfs_server_daemon }}"
     state: started 
     enabled: yes
-  when: nfs_exports|length
+  when: nfs_exports|length and vagrant_nfs_used == false
 
 - name: Ensure rpcbind is running
   service: 

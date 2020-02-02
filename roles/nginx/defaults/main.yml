@@ -19,3 +19,6 @@ cache_basics_conf: "{{ nginx_conf_dir }}/{{ cache_basics_conf_name }}"
 
 # securtity & perf
 worker_file_limit: 8092
+
+keepalive_timeout: "{% if app_env == 'dev' and nfs == 'true' %}300s{%else%}60s{%endif%}"
+keepalive_requests: "{% if app_env == 'dev' and nfs == 'true' %}200{%else%}60{%endif%}"

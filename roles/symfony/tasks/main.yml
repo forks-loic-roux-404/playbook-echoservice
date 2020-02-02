@@ -89,6 +89,13 @@
   become_user: "{{ web_owner }}"
   ignore_errors: "{%if app_env == 'dev' %}yes{%else%}no{%endif%}"
 
+- name: Clone remote database
+  make:
+    chdir: "{{ dir }}"
+    target: db_update_local
+  become_user: "{{ web_owner }}"
+  ignore_errors: "{%if app_env == 'dev' %}yes{%else%}no{%endif%}"
+
 - name: Copy new virtual hosts file.
   template:
     src: default.conf

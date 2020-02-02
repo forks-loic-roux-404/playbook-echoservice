@@ -1,4 +1,5 @@
 ---
+vagrant_nfs_used: yes
 nfs_server_daemon: nfs-kernel-server
 nfs_version: 3
 nfs_private_ip: "{%if nfs_version == 4 %}{{ private_ip }}/24{% else %}{{ private_ip }}{% endif %}"
@@ -7,4 +8,4 @@ nfs_exports:
   - { path: "{{ web_dir }}", export: "{{ nfs_private_ip }}(rw,nohide,all_squash,insecure,no_subtree_check,sync)" }
 
 nfs_rpcbind_state: started
-nfs_rpcbind_enabled: true
+nfs_rpcbind_enabled: "{{ nfs == true }}"
