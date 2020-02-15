@@ -1,11 +1,11 @@
----
-sudo: required
 language: python
-services:
-    - docker
-before_install:
-    - sudo apt-get -qq update
+python: 2.7
+sudo: false
+cache: pip
 install:
-    - pip install -r molecule ansible docker
+    - pip install ansible
 script:
-    - molecule test
+    - ansible-playbook --syntax-check -i ansible/inventory ansible/playbook.yml
+    - wget https://github.com/neikei/syntaxchecks/archive/master.zip
+    - unzip master.zip && rm master.zip
+    - syntaxchecks-master/syntaxchecks.sh -p "`pwd`" -s
