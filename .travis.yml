@@ -5,7 +5,7 @@ cache: pip
 install:
     - pip install ansible
 script:
-    - ansible-playbook --syntax-check -i ansible/inventory ansible/playbook.yml
+    - ansible-playbook --syntax-check -i inventory playbook.yml
     - wget https://github.com/neikei/syntaxchecks/archive/master.zip
     - unzip master.zip && rm master.zip
     - syntaxchecks-master/syntaxchecks.sh -p "`pwd`" -s
