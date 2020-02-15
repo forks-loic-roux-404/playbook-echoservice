@@ -67,8 +67,6 @@
     APP_ENV: "{{ app_env }}"
   become_user: vagrant
   register: new_symfony_project
-  ignore_errors: yes
-  when: stat_project.stat.exists == false or app_env == 'dev'
 
 - name: clean
   file:
