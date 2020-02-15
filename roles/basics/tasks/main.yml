@@ -2,6 +2,7 @@
 - name: Install basic packages
   apt: 
     pkg:
+      - ssh2
       - gnupg2
       - vim
       - curl
@@ -12,6 +13,7 @@
       - apt-transport-https
       - ca-certificates
       - imagemagick
+      - ufw
     state: present
 
 ### Convenience
@@ -61,3 +63,43 @@
     owner: vagrant
     group: vagrant
     mode: 750
+
+# Firewall
+- name: Allow everything and enable UFW
+  ufw:
+    state: enabled
+    policy: allow
+
+- name: Set logging
+  ufw:
+    logging: 'on'
+
+- ufw:
+    rule: limit
+    port: ssh
+    proto: tcp
+
+- name: Delete OpenSSH rule
+  ufw:
+    rule: allow
+    name: OpenSSH
+    delete: yes
+
+- name: Allow all access to tcp port 80
+  ufw:
+    rule: allow
+    port: '{{ item }}'
+    proto: tcp
+  loop:
+    - 3306
+    - 80
+    - 22
+
+- name: Allow all access from RFC1918 networks to this host
+  ufw:
+    rule: allow
+    src: '{{ item }}'
+  loop:
+    - 10.0.0.0/8
+    - 172.16.0.0/12
+    - 192.168.0.0/16
