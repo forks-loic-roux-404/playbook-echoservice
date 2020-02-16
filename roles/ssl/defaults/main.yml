@@ -17,8 +17,8 @@ ssl_certs_fields: "/C={{ ssl_certs_country }}/ST={{ ssl_certs_state }}/L={{ ssl_
 
 ssl_certs_path: "/etc/ssl/{{ ssl_certs_common_name }}"
 ssl_certs_conf_path: "{{ ssl_certs_path }}/{{ ssl_certs_common_name }}"
-ssl_certs_path_owner: "vagrant"
-ssl_certs_path_group: "vagrant"
+ssl_certs_path_owner: "{{ web_owner }}"
+ssl_certs_path_group: "{{ web_group }}"
 ssl_certs_privkey_path: "{{ ssl_certs_path }}/{{ ssl_certs_common_name }}.key"
 ssl_certs_cert_path: "{{ ssl_certs_path }}/{{ ssl_certs_common_name }}.pem"
 ssl_certs_csr_path: "{{ ssl_certs_path }}/{{ ssl_certs_common_name }}.csr"

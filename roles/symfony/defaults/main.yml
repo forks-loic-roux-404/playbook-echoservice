@@ -4,17 +4,28 @@ src_branch: "{% if app_env == 'dev' %}develop{%else%}master{%endif%}"
 # env
 MAILER_DSN: "gmail+smtp://{{ mail_user }}:{{ mail_pw }}@gmail"
 
+# symfony
 sf_console: "{{ web_dir }}/bin/console"
+no_dev: "{%if app_env != 'dev'%}yes{%else%}no{%endif%}"
+#
+make_db_rebuild: "db_rebuild"
 
 # tests
 KERNEL_CLASS: Core/Kernel
 
 # cron
+enable_cron: no
 cron_workspace: "{{ dir }}/.crons"
 cron_log_dir: "{{ cron_workspace}}/logs"
 db_update: "make -C {{ dir }} db_update_local"
 db_update_cron_log_file: "{{ cron_log_dir }}/db_update.log"
 cron_clear_migration: "{{ cron_workspace }}/clear_migrations.sh"
 
-    # assets
+# assets
 yarn_build_command: prod
+assets_build_final: "{%if app_env == 'dev' %}dev{%else%}{{ yarn_build_command }}{%endif%}"
+
+# tests
+phpunit_enable: no
+phpunit_path: "{{ web_dir }}/bin/phpunit"
+phpunit_chmod: 0770
