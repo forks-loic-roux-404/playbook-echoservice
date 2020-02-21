@@ -1,4 +1,4 @@
-- name: Remove python db manager
+- name: Remove uneeded dependancies
   apt:
     pkg:
       - python-pymysql

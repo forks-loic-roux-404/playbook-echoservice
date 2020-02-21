@@ -9,7 +9,7 @@
 
 - name: Stat project
   debug:
-     msg: "{{ stat_project }}"
+     msg: "{{ stat_project.stat.exists }}"
 
 - name: Unmount directory
   mount:
@@ -57,7 +57,6 @@
     dest: "/home/vagrant/.bash_aliases"
     block: "{{ lookup('template', 'aliases') }}"
   when: app_env == 'dev'
-  ignore_errors: yes # if revert to bento box
 
 # Symfony 5
 - name: Init symfony5 project

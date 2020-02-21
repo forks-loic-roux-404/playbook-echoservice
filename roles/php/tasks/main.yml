@@ -1,5 +1,5 @@
 ### Variable depending on env
-- include_vars: "../defaults/php_ini_{{ app_env }}.yml"
+- include_vars: "../defaults/php_vars.yml"
 
 - name: Check installed PHP version
   shell: 'dpkg --list | grep php | grep "^ii" | wc -l'

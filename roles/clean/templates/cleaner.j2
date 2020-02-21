@@ -2,15 +2,18 @@
     sudo rm -rf /vagrant/**
 {% endif %}
 
-# uncomment if your not in debug mode
-sudo apt -y autoremove ansible
-sudo apt -y autoremove python
+# Uninstall Ansible and dependencies.
+pip uninstall ansible
+apt-get -y purge python-pip python-dev python python2.7 python3;
+
+# Apt cleanup.
+apt-get -y autoremove;
+apt-get -y clean;
+apt autoremove
+apt update
 
 rm {{ log_dir }}/*
 
 if [ -d /tmp/ansible ]; then
     sudo rm -rf /tmp/ansible
 fi
-
-# composer cache
-sudo rm -rf /home/vagrant/.cache

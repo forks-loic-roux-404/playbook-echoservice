@@ -16,7 +16,7 @@ realpath_cache_ttl: '600'
 # [opcache]
 opcache:
   enable: '1'
-  preload: ''
+  preload: '' # example in prod"{{web_dir}}/var/cache/prod/App_KernelProdContainer.preload.php"
   memory_consumption: '256'
   max_accelerated_files: '20000'
   validate_timestamps: '1'
@@ -38,3 +38,18 @@ php_xdebug:
   remote_autostart: "false"
   max_nesting_level: 256
   cli_disable: true
+
+
+#[fpm]
+pm:
+  pm: ondemand
+  max_children: 20
+  max_requests: 256
+  # timeouts
+  process_idle_timeout: 16s
+  # warning spare servers settings not used with ondemand option set
+  min_spare_servers: 30
+  start_servers: 60
+  max_spare_servers: 90
+
+request_terminate_timeout: 32s

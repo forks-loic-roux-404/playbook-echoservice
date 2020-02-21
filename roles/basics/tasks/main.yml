@@ -57,15 +57,15 @@
     port: '{{ item }}'
     proto: tcp
   loop:
-    - 3306
-    - 80
-    - 22
+    - '3306'
+    - '80'
+    - '22'
 
 - name: Allow all access from RFC1918 networks to this host
   ufw:
     rule: allow
     src: '{{ item }}'
   loop:
-    - 10.0.0.0/8
-    - 172.16.0.0/12
-    - 192.168.0.0/16
+    - '10.0.0.0/8'
+    - '172.16.0.0/12'
+    - '192.168.0.0/16'
