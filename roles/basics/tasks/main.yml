@@ -2,32 +2,12 @@
 - name: Install basic packages
   apt: 
     pkg:
-      - vim
-      - curl
-      - wget
-      - zip
-      - unzip
       - postfix
       - apt-transport-https
       - ca-certificates
       - imagemagick
       - ufw
     state: present
-
-### Convenience
-- name: Configure inputrc / vimrc and motd for root
-  become: yes
-  template: 
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-  with_items:
-   - { src: inputrc, dest: /root/.inputrc }
-   - { src: vimrc, dest: /root/.vimrc }
-   - { src: inputrc, dest: /home/vagrant/.inputrc }
-   - { src: vimrc, dest: /home/vagrant/.vimrc }
-   - { src: motd, dest: /etc/motd }
-   - { src: bashrc, dest: /home/vagrant/.bashrc }
-   - { src: aliases, dest: /home/vagrant/.bash_aliases }
 
 - name: Edit some configs
   lineinfile:
@@ -37,42 +17,30 @@
   with_items:
     - { path: '/etc/ssh/sshd_config', regexp: '^#PrintLastLog yes', line: PrintLastLog no }
     - { path: '/etc/ssh/sshd_config', regexp: '^#PermitRootLogin prohibit-password', line: "PermitRootLogin {{ permit_root_login }}" }
-  #ignore_errors: yes
-
-- name: Others configs
-  lineinfile:
-    path: "{{ item.path }}"
-    line: "{{ item.line }}"
-  with_items:
-    - { path: '/etc/sysctl.conf', line: "vm.overcommit_memory={{ over_commit_memory }}" }
-  #ignore_errors: yes
-
-- name: Set new welcome message  
-  file:
-    path: /etc/update-motd.d/
-    state: absent
-  become: yes
+  notify:
+    - restart sshd
 
 - name: Create logs dir
   file:
     path: "{{ log_project_dir }}"
     state: directory
     recurse: yes
-    owner: vagrant
-    group: vagrant
+    owner: "{{ web_owner }}"
+    group: "{{ web_group }}"
     mode: 750
 
 # Firewall
 - name: Allow everything and enable UFW
   ufw:
     state: enabled
-    policy: allow
+    policy: '{{ ufw_policy }}'
 
 - name: Set logging
   ufw:
-    logging: 'on'
+    logging: 'off'
 
-- ufw:
+- name: limit connection to tcp
+  ufw:
     rule: limit
     port: ssh
     proto: tcp
@@ -89,15 +57,15 @@
     port: '{{ item }}'
     proto: tcp
   loop:
-    - 3306
-    - 80
-    - 22
+    - '3306'
+    - '80'
+    - '22'
 
 - name: Allow all access from RFC1918 networks to this host
   ufw:
     rule: allow
     src: '{{ item }}'
   loop:
-    - 10.0.0.0/8
-    - 172.16.0.0/12
-    - 192.168.0.0/16
+    - '10.0.0.0/8'
+    - '172.16.0.0/12'
+    - '192.168.0.0/16'

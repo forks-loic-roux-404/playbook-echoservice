@@ -4,17 +4,12 @@
 
 - name: Check if composer project is initialized
   stat:
-    path: "{{ dir }}"
+    path: "{{ web_dir }}/vendor"
   register: stat_project
 
-#- name: Stat project
-#  debug:
-#     msg: "{{ stat_project }}"
-
-- name: Init work folder
-  stat:
-    path: "{{ web_dir }}"
-  register: stat_project_data
+- name: Stat project
+  debug:
+     msg: "{{ stat_project.stat.exists }}"
 
 - name: Unmount directory
   mount:
@@ -27,7 +22,7 @@
   file:
     path: "{{ dir }}"
     state: absent
-  when: stat_project.stat.exists == false or app_env == 'dev'
+  when: stat_project.stat.exists == false or app_env == 'prod'
 
 - name: Correct permissions
   file:
@@ -44,25 +39,31 @@
     dest: "{{ dir }}"
     version: "{{ src_branch }}"
   become_user: "{{ web_owner }}"
-  when: stat_project.stat.exists == false or app_env == 'dev'
+  when: stat_project.stat.exists == false or app_env == 'prod'
 
-- name: parameters
+- name: Generate config files
+  become: yes
   template:
-    src: parameters_dev.yaml
-    dest: "{{ web_dir }}/config/parameters.yaml"
-
-- name: PhpUnit
-  template:
-    src: phpunit.xml
-    dest: "{{ web_dir }}/phpunit.xml"
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
     owner: "{{ web_owner }}"
+    group: "{{ web_group }}"
+  with_items:
+    - { src: parameters_dev.yaml, dest: "{{ web_dir }}/config/parameters.yaml" }
+    - { src: phpunit.xml, dest: "{{ web_dir }}/phpunit.xml" }
+
+- name: sf aliases
+  blockinfile:
+    dest: "/home/vagrant/.bash_aliases"
+    block: "{{ lookup('template', 'aliases') }}"
+  when: app_env == 'dev'
 
 # Symfony 5
 - name: Init symfony5 project
   composer:
     command: install
     working_dir: "{{ web_dir }}"
-    no_dev: "{%if app_env != 'dev'%}yes{%else%}no{%endif%}"
+    no_dev: "{{ no_dev }}"
   environment:
     APP_ENV: "{{ app_env }}"
   become_user: vagrant
@@ -77,29 +78,36 @@
     - { path: .env.test }
     - { path: "{{ dir }}/.git" }
 
-- name: Dump schema
-  command: "{{ sf_console }} doctrine:schema:update --force --no-interaction"
+- name:  db creation
+  command: "{{ sf_console }} {{ item }}"
   become_user: "{{ web_owner }}"
-  ignore_errors: "{%if app_env == 'dev' %}yes{%else%}no{%endif%}"
+  with_items:
+    - doctrine:database:drop --connection=default --force -n
+    - doctrine:database:create --connection=default -n
+    - doctrine:schema:create -f -n
+    - doctrine:fixture:load -n
+  when: stat_project.stat.exists == false and app_env == 'dev'
+  ignore_errors: yes
 
-- name: Build assets
-  command: "yarn --cwd {{ web_dir }} {%if app_env == 'dev' %}dev{%else%}{{ yarn_build_command }}{%endif%}"
+- name: php unit execution right
+  file:
+    dest: "{{ phpunit_path }}"
+    owner: "{{ web_owner }}"
+    group: "{{ web_group }}"
+    mode: "{{ phpunit_chmod }}"
+
+- name: Install phpunit
+  command: "php {{ phpunit_path }}"
   become_user: "{{ web_owner }}"
-  ignore_errors: "{%if app_env == 'dev' %}yes{%else%}no{%endif%}"
+  when: app_env == 'dev' and phpunit_enable == true
 
 - name: Copy new virtual hosts file.
   template:
     src: default.conf
-    dest: "/etc/nginx/sites-available/{{ projectname }}"
- 
-- name: Enable new virtual hosts file.
-  file:
-    src: "/etc/nginx/sites-available/{{ projectname }}"
-    dest: "/etc/nginx/sites-enabled/{{ projectname }}"
-    state: link
+    dest: "/etc/nginx/conf.d/default.conf"
   notify:
-   - restart nginx
+    - restart nginx
 
 - name: Include cron config for project
   include_tasks: cron.yml
-  when: app_env != 'prod'
+  when: app_env != 'prod' and enable_cron == true
