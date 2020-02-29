@@ -6,7 +6,6 @@
   mount:
     path: "{{ web_dir }}"
     state: unmounted
-  when: stat_project.stat.exists == true and nfs == true
 
 - name: Prepare fresh directory
   become: yes
