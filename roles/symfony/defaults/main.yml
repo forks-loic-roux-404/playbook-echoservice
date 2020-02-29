@@ -7,8 +7,10 @@ MAILER_DSN: "gmail+smtp://{{ mail_user }}:{{ mail_pw }}@gmail"
 # symfony
 sf_console: "{{ web_dir }}/bin/console"
 no_dev: "{%if app_env != 'dev'%}yes{%else%}no{%endif%}"
-#
+# commands
 make_db_rebuild: "db_rebuild"
+init_sf_commands:
+    - "ecs:init-app"
 
 # tests
 KERNEL_CLASS: Core/Kernel

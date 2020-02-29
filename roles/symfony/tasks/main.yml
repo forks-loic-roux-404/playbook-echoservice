@@ -49,7 +49,7 @@
     owner: "{{ web_owner }}"
     group: "{{ web_group }}"
   with_items:
-    - { src: parameters_dev.yaml, dest: "{{ web_dir }}/config/parameters.yaml" }
+    - { src: parameters.yaml, dest: "{{ web_dir }}/config/parameters.yaml" }
     - { src: phpunit.xml, dest: "{{ web_dir }}/phpunit.xml" }
 
 - name: sf aliases
@@ -78,14 +78,10 @@
     - { path: .env.test }
     - { path: "{{ dir }}/.git" }
 
-- name:  db creation
+- name: project init db with command
   command: "{{ sf_console }} {{ item }}"
   become_user: "{{ web_owner }}"
-  with_items:
-    - doctrine:database:drop --connection=default --force -n
-    - doctrine:database:create --connection=default -n
-    - doctrine:schema:create -f -n
-    - doctrine:fixture:load -n
+  with_items: "{{ init_sf_commands }}"
   when: stat_project.stat.exists == false and app_env == 'dev'
   ignore_errors: yes
 
