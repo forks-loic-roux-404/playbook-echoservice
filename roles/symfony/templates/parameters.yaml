@@ -4,3 +4,4 @@ parameters:
     env(MAILER_DSN): "{{ MAILER_DSN }}"
     env(LOCAL_DATABASE_URL): "{{ mysql_url }}"
     env(REMOTE_DATABASE_URL): "{{ backup_url }}"
+    env(MAKE_PATH): "{{ dir }}"

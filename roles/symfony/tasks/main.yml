@@ -2,27 +2,16 @@
 - set_fact:
     app_secret: "{{ lookup('password', '/dev/null length=32 chars=ascii_letters') }}"
 
-- name: Check if composer project is initialized
-  stat:
-    path: "{{ web_dir }}/vendor"
-  register: stat_project
-
-- name: Stat project
-  debug:
-     msg: "{{ stat_project.stat.exists }}"
-
 - name: Unmount directory
   mount:
     path: "{{ web_dir }}"
     state: unmounted
-  when: stat_project.stat.exists == true and nfs == true
 
 - name: Prepare fresh directory
   become: yes
   file:
     path: "{{ dir }}"
     state: absent
-  when: stat_project.stat.exists == false or app_env == 'prod'
 
 - name: Correct permissions
   file:
@@ -39,7 +28,6 @@
     dest: "{{ dir }}"
     version: "{{ src_branch }}"
   become_user: "{{ web_owner }}"
-  when: stat_project.stat.exists == false or app_env == 'prod'
 
 - name: Generate config files
   become: yes
@@ -49,7 +37,7 @@
     owner: "{{ web_owner }}"
     group: "{{ web_group }}"
   with_items:
-    - { src: parameters_dev.yaml, dest: "{{ web_dir }}/config/parameters.yaml" }
+    - { src: parameters.yaml, dest: "{{ web_dir }}/config/parameters.yaml" }
     - { src: phpunit.xml, dest: "{{ web_dir }}/phpunit.xml" }
 
 - name: sf aliases
@@ -78,15 +66,10 @@
     - { path: .env.test }
     - { path: "{{ dir }}/.git" }
 
-- name:  db creation
+- name: project init db with command
   command: "{{ sf_console }} {{ item }}"
   become_user: "{{ web_owner }}"
-  with_items:
-    - doctrine:database:drop --connection=default --force -n
-    - doctrine:database:create --connection=default -n
-    - doctrine:schema:create -f -n
-    - doctrine:fixture:load -n
-  when: stat_project.stat.exists == false and app_env == 'dev'
+  with_items: "{{ init_sf_commands }}"
   ignore_errors: yes
 
 - name: php unit execution right
