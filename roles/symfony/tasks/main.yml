@@ -2,15 +2,6 @@
 - set_fact:
     app_secret: "{{ lookup('password', '/dev/null length=32 chars=ascii_letters') }}"
 
-- name: Check if composer project is initialized
-  stat:
-    path: "{{ web_dir }}/vendor"
-  register: stat_project
-
-- name: Stat project
-  debug:
-     msg: "{{ stat_project.stat.exists }}"
-
 - name: Unmount directory
   mount:
     path: "{{ web_dir }}"
@@ -22,7 +13,6 @@
   file:
     path: "{{ dir }}"
     state: absent
-  when: stat_project.stat.exists == false or app_env == 'prod'
 
 - name: Correct permissions
   file:
@@ -39,7 +29,6 @@
     dest: "{{ dir }}"
     version: "{{ src_branch }}"
   become_user: "{{ web_owner }}"
-  when: stat_project.stat.exists == false or app_env == 'prod'
 
 - name: Generate config files
   become: yes
@@ -82,7 +71,6 @@
   command: "{{ sf_console }} {{ item }}"
   become_user: "{{ web_owner }}"
   with_items: "{{ init_sf_commands }}"
-  when: stat_project.stat.exists == false and app_env == 'dev'
   ignore_errors: yes
 
 - name: php unit execution right
