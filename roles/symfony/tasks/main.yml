@@ -66,11 +66,21 @@
     - { path: .env.test }
     - { path: "{{ dir }}/.git" }
 
-- name: project init db with command
+- name: project init with make commands
+  make:
+      chdir: "{{ dir }}"
+      target: "{{ item }}"
+  with_items: "{{ init_make_commands }}"
+  when: init_make_commands is defined
+    and init_make_commands|trim != ''
+
+- name: project init with symfony console commands
   command: "{{ sf_console }} {{ item }}"
   become_user: "{{ web_owner }}"
   with_items: "{{ init_sf_commands }}"
   ignore_errors: yes
+  when: init_sf_commands is defined
+      and init_sf_commands|trim != ''
 
 - name: php unit execution right
   file:
