@@ -56,10 +56,7 @@
     rule: allow
     port: '{{ item }}'
     proto: tcp
-  loop:
-    - '3306'
-    - '80'
-    - '22'
+  loop: "{{ ufw_ports }}"
 
 - name: Allow all access from RFC1918 networks to this host
   ufw:

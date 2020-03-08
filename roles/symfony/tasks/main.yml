@@ -66,7 +66,7 @@
     - { path: .env.test }
     - { path: "{{ dir }}/.git" }
 
-- name: project init with make commands
+- name: project scss with make commands
   make:
       chdir: "{{ dir }}"
       target: "{{ item }}"
@@ -74,7 +74,7 @@
   when: init_make_commands is defined
     and init_make_commands|trim != ''
 
-- name: project init with symfony console commands
+- name: project scss with symfony console commands
   command: "{{ sf_console }} {{ item }}"
   become_user: "{{ web_owner }}"
   with_items: "{{ init_sf_commands }}"

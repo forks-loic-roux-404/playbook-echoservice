@@ -37,6 +37,12 @@
     creates: "{{ ssl_certs_cert_path }}"
   when: ssl_certs_generate_self_signed
 
+- name: Certif pkcs12 (pem + csr)
+  become: true
+  command: "openssl pkcs12 -export -inkey {{ ssl_certs_privkey_path }} -in {{ ssl_certs_cert_path }} -out {{ ssl_certs_pkcs12_path }} -passout pass:{{ ssl_pass }}" #TODO: add variable password
+  args:
+    creates: "{{ ssl_certs_pkcs12_path }}"
+
 - name: Self-signed SSL certificate file ownership
   file:
     path: "{{ ssl_certs_cert_path }}"
@@ -44,9 +50,3 @@
     group: "{{ ssl_certs_path_group }}"
     mode: "{{ ssl_certs_mode }}"
   when: ssl_certs_generate_self_signed
-
-- name: Certif pkcs12 (pem + csr)
-  become: true
-  command: "openssl pkcs12 -export -inkey {{ ssl_certs_privkey_path }} -in {{ ssl_certs_cert_path }} -out {{ ssl_certs_pkcs12_path }} -passout pass:" #TODO: add variable password
-  args:
-    creates: "{{ ssl_certs_pkcs12_path }}"

@@ -1,2 +1,9 @@
-permit_root_login: "{% if app_env == 'dev' %} yes {% else %} no {% endif %}"
-ufw_policy: "{%if app_env == 'dev'%}allow{%else%}deny{%endif%}"
+permit_root_login: "yes"
+ufw_policy: "allow"
+ufw_ports:
+    - '80'
+    - '81'
+    - '82'
+    - '3306'
+    - '5432'
+    - '22'

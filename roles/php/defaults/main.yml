@@ -26,7 +26,7 @@ php_modules:
     - zip
     - bz2
     - redis
-    #- gmp
+    - gmp
     - igbinary
     - bcmath
     - imagick
@@ -34,9 +34,9 @@ php_modules:
   # - mongodb
     - msgpack
     - pspell
-    #- ssh2
+    - ssh2
     - xmlrpc
-    #- common
+    - common
     - xdebug
     - apcu
 

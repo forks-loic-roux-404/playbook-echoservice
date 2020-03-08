@@ -14,7 +14,7 @@ init_sf_commands:
     #- "make -C {{ dir }} {{ make_db_command }}"
 
 # tests
-KERNEL_CLASS: Core/Kernel
+KERNEL_CLASS: "Core\\Kernel"
 
 # cron
 enable_cron: no

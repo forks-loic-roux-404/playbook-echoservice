@@ -2,7 +2,7 @@
 
 - name: Check if MySQL is already installed.
   stat: 
-    path: /etc/init.d/mysql
+    path: /etc/scss.d/mysql
   register: mysql_installed
 
 - name: SQL install
