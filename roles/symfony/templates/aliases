@@ -15,6 +15,7 @@ alias compda="composer dump-autoload"
 
 # Npm aliases
 alias yn="yarn"
+alias yr="yarn run"
 alias yw="yarn watch"
 alias yt="yarn test"
 alias yl="yarn lint"
