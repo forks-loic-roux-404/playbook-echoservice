@@ -66,7 +66,7 @@
     - { path: .env.test }
     - { path: "{{ dir }}/.git" }
 
-- name: project scss with make commands
+- name: project init with make commands
   make:
       chdir: "{{ dir }}"
       target: "{{ item }}"
@@ -104,3 +104,8 @@
 - name: Include cron config for project
   include_tasks: cron.yml
   when: app_env != 'prod' and enable_cron == true
+
+- name: ensure nginx restart
+  service: 
+    name: nginx
+    state: restarted

@@ -9,7 +9,7 @@ sf_console: "{{ web_dir }}/bin/console"
 no_dev: "{%if app_env != 'dev'%}yes{%else%}no{%endif%}"
 # commands
 init_make_commands:
-    - "db_rebuild"
+    - "db"
 init_sf_commands:
     #- "make -C {{ dir }} {{ make_db_command }}"
 
