@@ -34,7 +34,6 @@ php_modules:
   # - mongodb
     - msgpack
     - pspell
-    - ssh2
     - xmlrpc
     - common
     - xdebug

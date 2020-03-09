@@ -66,7 +66,7 @@
     - { path: .env.test }
     - { path: "{{ dir }}/.git" }
 
-- name: project scss with make commands
+- name: project init with make commands
   make:
       chdir: "{{ dir }}"
       target: "{{ item }}"
@@ -74,7 +74,7 @@
   when: init_make_commands is defined
     and init_make_commands|trim != ''
 
-- name: project scss with symfony console commands
+- name: project init with symfony console commands
   command: "{{ sf_console }} {{ item }}"
   become_user: "{{ web_owner }}"
   with_items: "{{ init_sf_commands }}"
@@ -82,17 +82,14 @@
   when: init_sf_commands is defined
       and init_sf_commands|trim != ''
 
-- name: php unit execution right
-  file:
-    dest: "{{ phpunit_path }}"
-    owner: "{{ web_owner }}"
-    group: "{{ web_group }}"
-    mode: "{{ phpunit_chmod }}"
-
-- name: Install phpunit
-  command: "php {{ phpunit_path }}"
-  become_user: "{{ web_owner }}"
-  when: app_env == 'dev' and phpunit_enable == true
+- name: Ensure we deleted default nginx welcome page
+  file: 
+    path: "/etc/nginx/sites-enabled/default"
+    state: absent
+    force: yes
+  become: yes
+  notify:
+   - restart nginx
 
 - name: Copy new virtual hosts file.
   template:
@@ -104,3 +101,8 @@
 - name: Include cron config for project
   include_tasks: cron.yml
   when: app_env != 'prod' and enable_cron == true
+
+- name: ensure nginx restart
+  service: 
+    name: nginx
+    state: restarted
