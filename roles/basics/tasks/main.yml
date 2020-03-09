@@ -9,6 +9,13 @@
       - ufw
     state: present
 
+- name: smb
+  apt:
+    pkg:
+      - "{{ smb_package }}"
+    state: present
+  when: smb_enabled | bool
+
 - name: Edit some configs
   lineinfile:
     path: "{{ item.path }}"

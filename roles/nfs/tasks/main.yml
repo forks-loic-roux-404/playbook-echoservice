@@ -1,5 +1,5 @@
 ---
-- name: Ensure NFS utilities are installed.
+- name: Ensure NFS or SMB utilities are installed.
   apt:
     name:
       - nfs-common

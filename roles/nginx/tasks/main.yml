@@ -1,4 +1,13 @@
-### Install and configure webserver
+- name: Ensure we remove apache on machine
+  become: yes
+  apt:
+    purge: yes
+    force: yes
+    autoremove: yes
+    pkg:
+      - apache2
+    state: absent
+
 - name: Add apt key for Debian
   apt_key: 
     url: "https://nginx.org/keys/nginx_signing.key"
@@ -52,4 +61,11 @@
   service:
     name: nginx
     state: started
+    enabled: yes
+  ignore_errors: yes
+
+- name: Start Nginx and enable the service in autostart
+  service:
+    name: nginx
+    state: restarted
     enabled: yes
