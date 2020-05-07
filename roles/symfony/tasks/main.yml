@@ -27,6 +27,7 @@
     repo: "{{ src_repo }}"
     dest: "{{ dir }}"
     version: "{{ src_branch }}"
+    accept_hostkey: yes
   become_user: "{{ web_owner }}"
 
 - name: Generate config files
